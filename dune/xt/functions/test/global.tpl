@@ -5,9 +5,9 @@
 //      or  GPL-2.0+ (http://opensource.org/licenses/gpl-license)
 //          with "runtime exception" (http://www.dune-project.org/license.html)
 // Authors:
-//   Felix Schindler (2014 - 2017)
+//   Felix Schindler (2014 - 2016)
 //   Rene Milk       (2014 - 2016, 2018)
-//   Tobias Leibner  (2014 - 2017)
+//   Tobias Leibner  (2014 - 2016)
 
 #include <dune/xt/common/test/main.hxx>
 
@@ -15,7 +15,7 @@
 
 #include <dune/xt/common/exceptions.hh>
 #include <dune/xt/grid/grids.hh>
-#include <dune/xt/functions/lambda/global-function.hh>
+#include <dune/xt/functions/global.hh>
 #include <dune/xt/functions/interfaces.hh>
 
 #include "functions.hh"
@@ -27,8 +27,8 @@ struct GlobalLambdaFunctionTest : public FunctionTest<TESTFUNCTIONTYPE>
 {
   virtual void check() const
   {
-    const FunctionType zero([](DomainType /*x*/, const Common::Parameter& /*mu*/ = {}) { return RangeType(0); }, 0);
-    const FunctionType one([](DomainType /*x*/, const Common::Parameter& /*mu*/ = {}) { return RangeType(1); }, 0);
+    const FunctionType zero([](DomainType /*x*/) { return RangeType(0); }, 0);
+    const FunctionType one([](DomainType /*x*/) { return RangeType(1); }, 0);
     const auto diff = zero - one;
     const auto xx = DomainType(666);
     EXPECT_EQ(zero.evaluate(xx), RangeType(0));
