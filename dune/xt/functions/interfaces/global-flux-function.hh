@@ -67,11 +67,11 @@ public:
   typedef typename BaseType::StateType StateType;
   typedef typename BaseType::StateRangeType StateRangeType;
   typedef typename BaseType::RangeType RangeType;
-  typedef typename LocalfunctionType::PartialXRangeType PartialXRangeType;
+  //  typedef typename LocalfunctionType::PartialXRangeType PartialXRangeType;
   typedef typename LocalfunctionType::PartialURangeType PartialURangeType;
-  typedef typename BaseType::ColRangeType ColRangeType;
-  typedef typename LocalfunctionType::ColPartialXRangeType ColPartialXRangeType;
-  typedef typename LocalfunctionType::ColPartialURangeType ColPartialURangeType;
+  //  typedef typename BaseType::ColRangeType ColRangeType;
+  //  typedef typename LocalfunctionType::ColPartialXRangeType ColPartialXRangeType;
+  //  typedef typename LocalfunctionType::ColPartialURangeType ColPartialURangeType;
 
   virtual ~GlobalFluxFunctionInterface()
   {
@@ -84,31 +84,31 @@ public:
                         RangeType& /*ret*/,
                         const Common::Parameter& /*mu*/ = {}) const = 0;
 
-  virtual void evaluate_col(const size_t /*col*/,
-                            const DomainType& /*x*/,
-                            const StateRangeType& /*u*/,
-                            ColRangeType& /*ret*/,
-                            const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void evaluate_col(const size_t /*col*/,
+  //                            const DomainType& /*x*/,
+  //                            const StateRangeType& /*u*/,
+  //                            ColRangeType& /*ret*/,
+  //                            const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
-  virtual void partial_x(const DomainType& /*x*/,
-                         const StateRangeType& /*u*/,
-                         PartialXRangeType& /*ret*/,
-                         const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_x(const DomainType& /*x*/,
+  //                         const StateRangeType& /*u*/,
+  //                         PartialXRangeType& /*ret*/,
+  //                         const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
-  virtual void partial_x_col(const size_t /*col*/,
-                             const DomainType& /*x*/,
-                             const StateRangeType& /*u*/,
-                             ColPartialXRangeType& /*ret*/,
-                             const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_x_col(const size_t /*col*/,
+  //                             const DomainType& /*x*/,
+  //                             const StateRangeType& /*u*/,
+  //                             ColPartialXRangeType& /*ret*/,
+  //                             const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
   virtual void partial_u(const DomainType& /*x*/,
                          const StateRangeType& /*u*/,
@@ -118,14 +118,14 @@ public:
     DUNE_THROW(NotImplemented, "");
   }
 
-  virtual void partial_u_col(const size_t /*col*/,
-                             const DomainType& /*x*/,
-                             const StateRangeType& /*u*/,
-                             ColPartialURangeType& /*ret*/,
-                             const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_u_col(const size_t /*col*/,
+  //                             const DomainType& /*x*/,
+  //                             const StateRangeType& /*u*/,
+  //                             ColPartialURangeType& /*ret*/,
+  //                             const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
   virtual RangeType evaluate(const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {}) const
   {
@@ -134,31 +134,32 @@ public:
     return ret;
   }
 
-  virtual ColRangeType
-  evaluate_col(const size_t col, const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {}) const
-  {
-    ColRangeType ret;
-    evaluate_col(col, xx, uu, ret, mu);
-    return ret;
-  }
+  //  virtual ColRangeType
+  //  evaluate_col(const size_t col, const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {})
+  //  const
+  //  {
+  //    ColRangeType ret;
+  //    evaluate_col(col, xx, uu, ret, mu);
+  //    return ret;
+  //  }
 
-  virtual PartialXRangeType
-  partial_x(const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {}) const
-  {
-    PartialXRangeType ret;
-    partial_x(xx, uu, ret, mu);
-    return ret;
-  }
+  //  virtual PartialXRangeType
+  //  partial_x(const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {}) const
+  //  {
+  //    PartialXRangeType ret;
+  //    partial_x(xx, uu, ret, mu);
+  //    return ret;
+  //  }
 
-  virtual ColPartialXRangeType partial_x_col(const size_t col,
-                                             const DomainType& xx,
-                                             const StateRangeType& uu,
-                                             const Common::Parameter& mu = {}) const
-  {
-    ColPartialXRangeType ret;
-    partial_x_col(col, xx, uu, ret, mu);
-    return ret;
-  }
+  //  virtual ColPartialXRangeType partial_x_col(const size_t col,
+  //                                             const DomainType& xx,
+  //                                             const StateRangeType& uu,
+  //                                             const Common::Parameter& mu = {}) const
+  //  {
+  //    ColPartialXRangeType ret;
+  //    partial_x_col(col, xx, uu, ret, mu);
+  //    return ret;
+  //  }
 
   virtual PartialURangeType
   partial_u(const DomainType& xx, const StateRangeType& uu, const Common::Parameter& mu = {}) const
@@ -168,15 +169,15 @@ public:
     return ret;
   }
 
-  virtual ColPartialURangeType partial_u_col(const size_t col,
-                                             const DomainType& xx,
-                                             const StateRangeType& uu,
-                                             const Common::Parameter& mu = {}) const
-  {
-    ColPartialURangeType ret;
-    partial_u_col(col, xx, uu, ret, mu);
-    return ret;
-  }
+  //  virtual ColPartialURangeType partial_u_col(const size_t col,
+  //                                             const DomainType& xx,
+  //                                             const StateRangeType& uu,
+  //                                             const Common::Parameter& mu = {}) const
+  //  {
+  //    ColPartialURangeType ret;
+  //    partial_u_col(col, xx, uu, ret, mu);
+  //    return ret;
+  //  }
 
   virtual std::unique_ptr<LocalfunctionType> local_function(const EntityImp& entity) const override final
   {
@@ -222,25 +223,25 @@ private:
       global_function_.evaluate(xx_global, uu, ret, mu);
     }
 
-    virtual void evaluate_col(const size_t col,
-                              const DomainType& xx,
-                              const StateRangeType& uu,
-                              ColRangeType& ret,
-                              const Common::Parameter& mu = {}) const override final
-    {
-      const auto xx_global = geometry_.global(xx);
-      global_function_.evaluate_col(col, xx_global, uu, ret, mu);
-    }
+    //    virtual void evaluate_col(const size_t col,
+    //                              const DomainType& xx,
+    //                              const StateRangeType& uu,
+    //                              ColRangeType& ret,
+    //                              const Common::Parameter& mu = {}) const override final
+    //    {
+    //      const auto xx_global = geometry_.global(xx);
+    //      global_function_.evaluate_col(col, xx_global, uu, ret, mu);
+    //    }
 
 
-    virtual void partial_x(const DomainType& xx,
-                           const StateRangeType& uu,
-                           PartialXRangeType& ret,
-                           const Common::Parameter& mu = {}) const override final
-    {
-      const auto xx_global = geometry_.global(xx);
-      global_function_.partial_x(xx_global, uu, ret, mu);
-    }
+    //    virtual void partial_x(const DomainType& xx,
+    //                           const StateRangeType& uu,
+    //                           PartialXRangeType& ret,
+    //                           const Common::Parameter& mu = {}) const override final
+    //    {
+    //      const auto xx_global = geometry_.global(xx);
+    //      global_function_.partial_x(xx_global, uu, ret, mu);
+    //    }
 
     virtual void partial_u(const DomainType& xx,
                            const StateRangeType& uu,
@@ -251,15 +252,15 @@ private:
       global_function_.partial_u(xx_global, uu, ret, mu);
     }
 
-    virtual void partial_u_col(const size_t col,
-                               const DomainType& xx,
-                               const StateRangeType& uu,
-                               ColPartialURangeType& ret,
-                               const Common::Parameter& mu = {}) const override final
-    {
-      const auto xx_global = geometry_.global(xx);
-      global_function_.partial_u_col(col, xx_global, uu, ret, mu);
-    }
+    //    virtual void partial_u_col(const size_t col,
+    //                               const DomainType& xx,
+    //                               const StateRangeType& uu,
+    //                               ColPartialURangeType& ret,
+    //                               const Common::Parameter& mu = {}) const override final
+    //    {
+    //      const auto xx_global = geometry_.global(xx);
+    //      global_function_.partial_u_col(col, xx_global, uu, ret, mu);
+    //    }
 
   private:
     const typename EntityImp::Geometry geometry_;

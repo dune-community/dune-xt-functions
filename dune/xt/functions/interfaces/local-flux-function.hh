@@ -56,11 +56,11 @@ public:
   static const constexpr size_t rC = rC_;
   static const constexpr size_t dimRangeCols = rC_;
   typedef typename LocalfunctionSetInterface<E, D, d, R, r, rC>::RangeType RangeType;
-  typedef typename LocalfunctionSetInterface<E, D, d, R, r, rC>::JacobianRangeType PartialXRangeType;
   typedef typename JacobianRangeTypeSelector<StateType::dimRange, R, r, rC>::type PartialURangeType;
-  typedef typename LocalfunctionSetInterface<E, D, d, R, r, 1>::RangeType ColRangeType;
-  typedef typename LocalfunctionSetInterface<E, D, d, R, r, 1>::JacobianRangeType ColPartialXRangeType;
-  typedef typename JacobianRangeTypeSelector<StateType::dimRange, R, r, 1>::type ColPartialURangeType;
+  //  typedef typename LocalfunctionSetInterface<E, D, d, R, r, rC>::JacobianRangeType PartialXRangeType;
+  //  typedef typename LocalfunctionSetInterface<E, D, d, R, r, 1>::RangeType ColRangeType;
+  //  typedef typename LocalfunctionSetInterface<E, D, d, R, r, 1>::JacobianRangeType ColPartialXRangeType;
+  //  typedef typename JacobianRangeTypeSelector<StateType::dimRange, R, r, 1>::type ColPartialURangeType;
 
   LocalFluxFunctionInterface(const EntityType& en)
     : entity_(en)
@@ -81,31 +81,31 @@ public:
                         RangeType& /*ret*/,
                         const Common::Parameter& /*mu*/ = {}) const = 0;
 
-  virtual void evaluate_col(const size_t /*col*/,
-                            const DomainType& /*x*/,
-                            const StateRangeType& /*u*/,
-                            ColRangeType& /*ret*/,
-                            const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void evaluate_col(const size_t /*col*/,
+  //                            const DomainType& /*x*/,
+  //                            const StateRangeType& /*u*/,
+  //                            ColRangeType& /*ret*/,
+  //                            const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
-  virtual void partial_x(const DomainType& /*x*/,
-                         const StateRangeType& /*u*/,
-                         PartialXRangeType& /*ret*/,
-                         const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_x(const DomainType& /*x*/,
+  //                         const StateRangeType& /*u*/,
+  //                         PartialXRangeType& /*ret*/,
+  //                         const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
-  virtual void partial_x_col(const size_t /*col*/,
-                             const DomainType& /*x*/,
-                             const StateRangeType& /*u*/,
-                             ColPartialXRangeType& /*ret*/,
-                             const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_x_col(const size_t /*col*/,
+  //                             const DomainType& /*x*/,
+  //                             const StateRangeType& /*u*/,
+  //                             ColPartialXRangeType& /*ret*/,
+  //                             const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
   virtual void partial_u(const DomainType& /*x*/,
                          const StateRangeType& /*u*/,
@@ -115,14 +115,14 @@ public:
     DUNE_THROW(NotImplemented, "");
   }
 
-  virtual void partial_u_col(const size_t /*col*/,
-                             const DomainType& /*x*/,
-                             const StateRangeType& /*u*/,
-                             ColPartialURangeType& /*ret*/,
-                             const Common::Parameter& /*mu*/ = {}) const
-  {
-    DUNE_THROW(NotImplemented, "");
-  }
+  //  virtual void partial_u_col(const size_t /*col*/,
+  //                             const DomainType& /*x*/,
+  //                             const StateRangeType& /*u*/,
+  //                             ColPartialURangeType& /*ret*/,
+  //                             const Common::Parameter& /*mu*/ = {}) const
+  //  {
+  //    DUNE_THROW(NotImplemented, "");
+  //  }
 
 
   /**
@@ -136,29 +136,31 @@ public:
     return ret;
   }
 
-  ColRangeType
-  evaluate_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
-  {
-    ColRangeType ret(0);
-    evaluate_col(col, x, u, ret, mu);
-    return ret;
-  }
+  //  ColRangeType
+  //  evaluate_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {})
+  //  const
+  //  {
+  //    ColRangeType ret(0);
+  //    evaluate_col(col, x, u, ret, mu);
+  //    return ret;
+  //  }
 
-  PartialXRangeType partial_x(const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
-  {
-    PartialXRangeType ret(0);
-    partial_x(x, u, ret, mu);
-    return ret;
-  }
+  //  PartialXRangeType partial_x(const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
+  //  {
+  //    PartialXRangeType ret(0);
+  //    partial_x(x, u, ret, mu);
+  //    return ret;
+  //  }
 
-  ColPartialXRangeType
-  partial_x_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
-  {
-    assert(col < dimRangeCols && "Column index is out of bounds!");
-    ColPartialXRangeType ret(0);
-    partial_x_col(col, x, u, ret, mu);
-    return ret;
-  }
+  //  ColPartialXRangeType
+  //  partial_x_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {})
+  //  const
+  //  {
+  //    assert(col < dimRangeCols && "Column index is out of bounds!");
+  //    ColPartialXRangeType ret(0);
+  //    partial_x_col(col, x, u, ret, mu);
+  //    return ret;
+  //  }
 
   PartialURangeType partial_u(const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
   {
@@ -167,14 +169,15 @@ public:
     return ret;
   }
 
-  ColPartialURangeType
-  partial_u_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {}) const
-  {
-    assert(col < dimRangeCols && "Column index is out of bounds!");
-    ColPartialURangeType ret(0);
-    partial_u_col(col, x, u, ret, mu);
-    return ret;
-  }
+  //  ColPartialURangeType
+  //  partial_u_col(const size_t col, const DomainType& x, const StateRangeType& u, const Common::Parameter& mu = {})
+  //  const
+  //  {
+  //    assert(col < dimRangeCols && "Column index is out of bounds!");
+  //    ColPartialURangeType ret(0);
+  //    partial_u_col(col, x, u, ret, mu);
+  //    return ret;
+  //  }
   /**
    * \}
    **/
