@@ -42,7 +42,7 @@ struct RangeTypeSelector<RangeFieldType, dimRange, 1>
 template <size_t dimDomain, class RangeFieldType, size_t dimRange, size_t dimRangeCols>
 struct JacobianRangeTypeSelector
 {
-  typedef Dune::FieldVector<Dune::FieldMatrix<RangeFieldType, dimRange, dimDomain>, dimRangeCols> type;
+  typedef FieldVector<Dune::XT::Common::FieldMatrix<RangeFieldType, dimRangeCols, dimDomain>, dimRange> type;
 };
 
 template <size_t dimDomain, class RangeFieldType, size_t dimRange>
