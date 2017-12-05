@@ -30,6 +30,7 @@
 #include "constant.pbh"
 #include "checkerboard.pbh"
 #include "ESV2007.bindings.hh"
+#include "indicator.hh"
 #include "expression.pbh"
 #include "spe10.pbh"
 
@@ -276,21 +277,53 @@ PYBIND11_PLUGIN(_functions)
 {
   namespace py = pybind11;
   using namespace pybind11::literals;
+  using namespace Dune::XT;
 
   py::module m("_functions", "dune-xt-functions");
   DUNE_XT_COMMON_BINDINGS_INITIALIZE(m, "dune.xt.functions");
 
-//  addbind_for_Grid<Dune::YaspGrid<1, Dune::EquidistantOffsetCoordinates<double, 1>>>(m);
-//  addbind_for_Grid<Dune::YaspGrid<2, Dune::EquidistantOffsetCoordinates<double, 2>>>(m);
 #if HAVE_DUNE_ALUGRID
-  addbind_for_Grid<Dune::ALUGrid<2, 2, Dune::simplex, Dune::conforming>>(m);
+  using G = ALU_2D_SIMPLEX_CONFORMING;
+  addbind_for_Grid<G>(m);
+
+  using E = typename G::template Codim<0>::Entity;
+  using D = typename G::ctype;
+  static const constexpr size_t d = G::dimension;
+  using R = double;
+  static const constexpr size_t r = 1;
+  static const constexpr size_t rC = 1;
+
+  using type = Functions::IndicatorFunction<E, D, d, R, r, rC>;
+  using InterfaceType = Functions::LocalizableFunctionInterface<E, D, d, R, r, rC>;
+  using bound_type = pybind11::class_<type, InterfaceType>;
+
+  const auto class_name = std::string("indicator_function");
+  const auto suffix = std::string("to_") + Common::to_string(r) + "x" + Common::to_string(rC);
+  const auto grid_name = Grid::bindings::grid_name<G>::value();
+
+  bound_type c(m,
+               Common::to_camel_case(class_name + "_" + grid_name + "_" + suffix).c_str(),
+               "dune-xt-functions: IndicatorFunction");
+
+  m.def((std::string("make_") + class_name + "_" + suffix).c_str(),
+        [](const Grid::GridProvider<G>& /*grid_provider*/,
+           const std::vector<std::pair<std::pair<Common::FieldVector<D, d>, Common::FieldVector<D, d>>, R>>&
+               domain_and_value_pairs,
+           const std::string& name) { return type(domain_and_value_pairs, name); },
+        "grid_provider"_a,
+        "domain_and_value_pairs"_a,
+        "name"_a = "indicator_function");
+#if HAVE_DUNE_FEM
+  m.def((std::string("make_") + class_name + "_" + suffix).c_str(),
+        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid_provider*/,
+           const std::vector<std::pair<std::pair<Common::FieldVector<D, d>, Common::FieldVector<D, d>>, R>>&
+               domain_and_value_pairs,
+           const std::string& name) { return type(domain_and_value_pairs, name); },
+        "grid_provider"_a,
+        "domain_and_value_pairs"_a,
+        "name"_a = "indicator_function");
+#endif // HAVE_DUNE_FEM
 #endif
-  //#if HAVE_UG
-  //  addbind_for_Grid<Dune::UGGrid<2>>(m, "2d_simplex_uggrid");
-  //#endif
-  //#if HAVE_ALBERTA
-  //  addbind_for_Grid<Dune::AlbertaGrid<2, 2>>(m, "2d_simplex_albertagrid");
-  //#endif
 
   return m.ptr();
 }
