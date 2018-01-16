@@ -24,9 +24,10 @@ using namespace Dune;
 using namespace Dune::XT;
 using namespace Dune::XT::Functions;
 
+{% for NAME,TYPE in config.names_and_types %}
 /* we just take the constant function as a container for the types we need */
 /* since this one always exists for all combinations */
-struct FunctionsTest : public FunctionTest<TESTFUNCTIONTYPE>
+struct FunctionsTest{{NAME}} : public FunctionTest<{{TYPE}}>
 {
   typedef FunctionsFactory<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
       FunctionsProviderType;
@@ -44,7 +45,9 @@ struct FunctionsTest : public FunctionTest<TESTFUNCTIONTYPE>
   }
 };
 
-TEST_F(FunctionsTest, creation_and_evalution)
+TEST_F(FunctionsTest{{NAME}}, creation_and_evalution)
 {
   this->check();
 }
+
+{% endfor  %}
