@@ -18,7 +18,7 @@
 #include <dune/xt/grid/gridprovider/cube.hh>
 #include <dune/xt/functions/lambda/local-function.hh>
 
-#include "functions.hh"
+#include <dune/xt/functions/test/functions.hh>
 
 using namespace Dune;
 using namespace Dune::XT;

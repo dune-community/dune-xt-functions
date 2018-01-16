@@ -19,7 +19,7 @@
 #include <dune/xt/functions/expression.hh>
 #include <dune/xt/functions/interfaces.hh>
 
-#include "functions.hh"
+#include <dune/xt/functions/test/functions.hh>
 
 using namespace Dune;
 using namespace Dune::XT;

@@ -18,7 +18,7 @@
 #include <dune/xt/functions/constant.hh>
 #include <dune/xt/functions/interfaces.hh>
 
-#include "functions.hh"
+#include <dune/xt/functions/test/functions.hh>
 
 using namespace Dune;
 using namespace Dune::XT;

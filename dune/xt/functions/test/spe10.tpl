@@ -19,7 +19,7 @@
 #include <dune/xt/functions/spe10/model1.hh>
 #include <dune/xt/functions/spe10/model2.hh>
 
-#include "functions.hh"
+#include <dune/xt/functions/test/functions.hh>
 
 using namespace Dune;
 using namespace Dune::XT;

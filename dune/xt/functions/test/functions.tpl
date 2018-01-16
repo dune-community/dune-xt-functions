@@ -18,7 +18,7 @@
 #include <dune/xt/functions.hh>
 #include <dune/xt/common/test/gtest/gtest.h>
 
-#include "functions.hh"
+#include <dune/xt/functions/test/functions.hh>
 
 using namespace Dune;
 using namespace Dune::XT;
