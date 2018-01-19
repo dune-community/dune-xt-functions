@@ -86,36 +86,40 @@ public:
   {
   }
 
-  virtual size_t order(const Common::Parameter& mu = {}) const override final
+  const XT::Common::ParameterType& parameter_type() const override final
+  {
+    return param_type_;
+  }
+
+  size_t order(const Common::Parameter& mu = {}) const override final
   {
     return order_lambda_(mu);
   }
 
-  virtual void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& mu = {}) const override final
+  void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& mu = {}) const override final
   {
-    auto parsed_mu = this->parse_and_check(mu);
+    auto parsed_mu = this->parse_parameter(mu);
     ret = lambda_(xx, parsed_mu);
   }
 
-  virtual RangeType evaluate(const DomainType& xx, const Common::Parameter& mu = {}) const override final
+  RangeType evaluate(const DomainType& xx, const Common::Parameter& mu = {}) const override final
   {
-    auto parsed_mu = this->parse_and_check(mu);
+    auto parsed_mu = this->parse_parameter(mu);
     return lambda_(xx, parsed_mu);
   }
 
-  virtual void
-  jacobian(const DomainType& xx, JacobianRangeType& ret, const Common::Parameter& mu = {}) const override final
+  void jacobian(const DomainType& xx, JacobianRangeType& ret, const Common::Parameter& mu = {}) const override final
   {
-    auto parsed_mu = this->parse_and_check(mu);
+    auto parsed_mu = this->parse_parameter(mu);
     ret = jacobian_lambda_(xx, parsed_mu);
   }
 
-  virtual std::string type() const override final
+  std::string type() const override final
   {
     return "globallambdafunction";
   }
 
-  virtual std::string name() const override final
+  std::string name() const override final
   {
     return name_;
   }
