@@ -40,6 +40,7 @@ class FlatTopFunction : public LocalizableFunctionInterface<E, D, d, R, r, rC>
   }
 };
 
+
 template <class E, class D, size_t d, class R>
 class FlatTopFunction<E, D, d, R, 1, 1> : public GlobalFunctionInterface<E, D, d, R, 1, 1>
 {
@@ -54,9 +55,6 @@ public:
   typedef typename BaseType::RangeFieldType RangeFieldType;
   static const size_t dimRange = BaseType::dimRange;
   typedef typename BaseType::RangeType RangeType;
-
-  typedef Common::FieldVector<DomainFieldType, dimDomain> StuffDomainType;
-  typedef Common::FieldVector<RangeFieldType, dimRange> StuffRangeType;
 
   static const bool available = true;
 
@@ -95,11 +93,12 @@ public:
                                          cfg.get("name", default_cfg.get<std::string>("name")));
   } // ... create(...)
 
-  FlatTopFunction(const StuffDomainType& lower_left,
-                  const StuffDomainType& upper_right,
-                  const StuffDomainType& boundary_layer,
-                  const StuffRangeType& value = default_config().template get<StuffRangeType>("value"),
-                  const std::string name_in = default_config().template get<std::string>("name"))
+  FlatTopFunction(
+      const Common::FieldVector<D, d>& lower_left,
+      const Common::FieldVector<D, d>& upper_right,
+      const Common::FieldVector<D, d>& boundary_layer,
+      const Common::FieldVector<R, 1>& value = default_config().template get<Common::FieldVector<R, 1>>("value"),
+      const std::string name_in = default_config().template get<std::string>("name"))
     : lower_left_(lower_left)
     , upper_right_(upper_right)
     , boundary_layer_(boundary_layer)
@@ -113,26 +112,26 @@ public:
 
   ThisType& operator=(const ThisType& other) = delete;
 
-  virtual ~FlatTopFunction()
-  {
-  }
+  ~FlatTopFunction() = default;
 
-  virtual std::string type() const override final
+  std::string type() const override final
   {
     return BaseType::static_id() + ".flattop";
   }
 
-  virtual std::string name() const override final
+  std::string name() const override final
   {
     return name_;
   }
 
-  virtual size_t order(const XT::Common::Parameter& /*mu*/ = {}) const override
+  size_t order(const XT::Common::Parameter& /*mu*/ = {}) const override final
   {
     return 3 * dimDomain;
   }
 
-  virtual void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& /*mu*/ = {}) const override
+  using BaseType::evaluate;
+
+  void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& /*mu*/ = {}) const override final
   {
     ret = value_;
     for (size_t dd = 0; dd < dimDomain; ++dd) {
@@ -173,7 +172,7 @@ private:
                      << "upper_right = ["
                      << upper_right_
                      << "]");
-    if (!(Common::FloatCmp::gt(boundary_layer_, StuffDomainType(0))))
+    if (!(Common::FloatCmp::gt(boundary_layer_, Common::FieldVector<D, d>(0))))
       DUNE_THROW(Common::Exceptions::wrong_input_given,
                  "boundary_layer has to be strictly positive!\n"
                      << "boundary_layer = ["
@@ -210,10 +209,10 @@ private:
       return std::pow(1.0 - point, 2) * (1.0 + 2.0 * point);
   } // ... phi_right(...)
 
-  const StuffDomainType lower_left_;
-  const StuffDomainType upper_right_;
-  const StuffDomainType boundary_layer_;
-  const StuffRangeType value_;
+  const Common::FieldVector<D, d> lower_left_;
+  const Common::FieldVector<D, d> upper_right_;
+  const Common::FieldVector<D, d> boundary_layer_;
+  const Common::FieldVector<R, 1> value_;
   const std::string name_;
 }; // class FlatTopFunction< ..., 1, 1 >
 
