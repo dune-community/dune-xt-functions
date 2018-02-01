@@ -29,7 +29,8 @@
                                                            Dune::XT::Grid::DD::SubdomainGrid<_G>>::type&,              \
                       const std::string,                                                                               \
                       const bool,                                                                                      \
-                      const VTK::OutputType) const
+                      const VTK::OutputType,                                                                           \
+                      const XT::Common::Parameter&) const
 #else
 #define _DUNE_XT_FUNCTIONS_INTERFACE_LIB_VISUALIZE_DD_SUBDOMAIN(_p, _G, _t, _b, _R, _r, _rC)
 #endif
@@ -45,7 +46,8 @@
           const typename Dune::XT::Grid::Layer<_G, Dune::XT::Grid::Layers::_t, Dune::XT::Grid::Backends::_b>::type&,   \
           const std::string,                                                                                           \
           const bool,                                                                                                  \
-          const VTK::OutputType) const
+          const VTK::OutputType,                                                                                       \
+          const XT::Common::Parameter&) const
 
 #if HAVE_DUNE_FEM
 #define _DUNE_XT_FUNCTIONS_INTERFACE_LIB_VISUALIZE_PART(_p, _G, _R, _r, _rC)                                           \
