@@ -41,7 +41,7 @@ namespace XT {
 namespace Functions {
 
 
-template <class GridViewType, size_t dimRange, size_t dimRangeCols = 1>
+template <class GridViewType, class RangeFieldType, size_t dimRange, size_t dimRangeCols = 1>
 class VisualizationAdapterFunction;
 
 
@@ -173,7 +173,8 @@ public:
     const auto& grid_view = tmp_grid_view.access();
     using GridViewType = std::decay_t<decltype(grid_view)>;
     const auto adapter =
-        std::make_shared<VisualizationAdapterFunction<GridViewType, dimRange, dimRangeCols>>(*this, "", param);
+        std::make_shared<VisualizationAdapterFunction<GridViewType, RangeFieldType, dimRange, dimRangeCols>>(
+            *this, "", param);
     std::unique_ptr<VTKWriter<GridViewType>> vtk_writer =
         subsampling ? Common::make_unique<SubsamplingVTKWriter<GridViewType>>(grid_view, /*subsampling_level=*/2)
                     : Common::make_unique<VTKWriter<GridViewType>>(grid_view, VTK::nonconforming);

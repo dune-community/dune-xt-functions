@@ -12,11 +12,10 @@
 #ifndef DUNE_XT_FUNCTIONS_VISUALIZATION_HH
 #define DUNE_XT_FUNCTIONS_VISUALIZATION_HH
 
-#include <boost/numeric/conversion/cast.hpp>
-
 #include <dune/grid/io/file/vtk/function.hh>
 
 #include <dune/xt/common/float_cmp.hh>
+#include <dune/xt/common/numeric_cast.hh>
 #include <dune/xt/grid/type_traits.hh>
 
 #include "interfaces.hh"
@@ -26,7 +25,7 @@ namespace XT {
 namespace Functions {
 
 
-template <class GridViewType, size_t dimRange, size_t dimRangeCols>
+template <class GridViewType, class R, size_t dimRange, size_t dimRangeCols>
 class VisualizationAdapterFunction : public VTKFunction<GridViewType>
 {
 public:
@@ -36,8 +35,7 @@ public:
   static const size_t dimDomain = GridViewType::dimension;
   typedef FieldVector<DomainFieldType, dimDomain> DomainType;
 
-  typedef LocalizableFunctionInterface<EntityType, DomainFieldType, dimDomain, double, dimRange, dimRangeCols>
-      FunctionType;
+  typedef LocalizableFunctionInterface<EntityType, DomainFieldType, dimDomain, R, dimRange, dimRangeCols> FunctionType;
 
   VisualizationAdapterFunction(const FunctionType& function,
                                const std::string nm = "",
@@ -61,7 +59,7 @@ private:
 
     static double evaluate(const int& /*comp*/, const typename FunctionType::RangeType& val)
     {
-      return val.frobenius_norm();
+      return Common::numeric_cast<double>(val.frobenius_norm());
     }
   }; // class Call
 
@@ -76,7 +74,7 @@ private:
 
     static double evaluate(const int& comp, const typename FunctionType::RangeType& val)
     {
-      return val[comp];
+      return Common::numeric_cast<double>(val[comp]);
     }
   }; // class Call< ..., 1, ... >
 
@@ -97,7 +95,7 @@ public:
   virtual double evaluate(int comp, const EntityType& en, const DomainType& xx) const override final
   {
     assert(comp >= 0);
-    assert(comp < boost::numeric_cast<int>(dimRange));
+    assert(comp < Common::numeric_cast<int>(dimRange));
     const auto local_func = function_.local_function(en);
     local_func->evaluate(xx, tmp_value_, param_);
     return Call<dimRange, dimRangeCols>::evaluate(comp, tmp_value_);
