@@ -23,6 +23,7 @@
 
 #include <dune/xt/common/exceptions.hh>
 #include <dune/xt/common/filesystem.hh>
+#include <dune/xt/common/fmatrix.hh>
 #include <dune/xt/common/memory.hh>
 #include <dune/xt/common/type_traits.hh>
 #include <dune/xt/grid/dd/subdomains/grid.hh>
