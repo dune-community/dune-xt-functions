@@ -1,6 +1,6 @@
-include functions.mini
+#include functions.mini
 
-__name = expression
+#__name = expression
 
-[__static]
-TESTFUNCTIONTYPE = Dune::XT::Functions::ExpressionFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>
+#[__static]
+#TESTFUNCTIONTYPE = Dune::XT::Functions::ExpressionFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>

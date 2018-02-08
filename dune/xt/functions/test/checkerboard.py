@@ -1,6 +1,6 @@
-include functions.mini
+#include functions.mini
 
-__name = checkerboard
+#__name = checkerboard
 
-[__static]
-TESTFUNCTIONTYPE = Dune::XT::Functions::CheckerboardFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>
+#[__static]
+#TESTFUNCTIONTYPE = Dune::XT::Functions::CheckerboardFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>

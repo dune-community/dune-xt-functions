@@ -1,10 +1,10 @@
-include functions.mini
+#include functions.mini
 
-dimRange = 1
-dimRangeCols = 1
+#dimRange = 1
+#dimRangeCols = 1
 
-__name = expression_parametric
+#__name = expression_parametric
 
-[__static]
-GRIDTYPE = {grid}
-TESTFUNCTIONTYPE = Dune::XT::Functions::ParametricExpressionFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>
+#[__static]
+#GRIDTYPE = {grid}
+#TESTFUNCTIONTYPE = Dune::XT::Functions::ParametricExpressionFunction<{entity_type}, double, {dimDomain}, double, {dimRange}, {dimRangeCols}>
