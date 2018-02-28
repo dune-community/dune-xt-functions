@@ -102,7 +102,7 @@ private:
     LocalFunction(const SmoothFunctionType& smooth_function, const EntityType& en)
       : BaseType(en)
       , smooth_function_(smooth_function)
-      , geometry_(nullptr) // <- happens in post_bind
+      , geometry_(nullptr)
     {
       post_bind(en);
     }
@@ -110,7 +110,7 @@ private:
     LocalFunction(const SmoothFunctionType& smooth_function)
       : BaseType()
       , smooth_function_(smooth_function)
-      , geometry_(nullptr) // <- happens in post_bind
+      , geometry_(nullptr)
     {
     }
 
@@ -126,7 +126,7 @@ private:
     int order(const Common::Parameter& param = {}) const override final
     {
       if (!geometry_)
-        DUNE_THROW(Exceptions::this_function_is_not_bound_to_an_entity_yet, "");
+        DUNE_THROW(Exceptions::not_bound_to_an_element_yet, "you need to call bind() first!");
       return smooth_function_.order(param);
     }
 
@@ -134,7 +134,7 @@ private:
                              const Common::Parameter& param = {}) const override final
     {
       if (!geometry_)
-        DUNE_THROW(Exceptions::this_function_is_not_bound_to_an_entity_yet, "");
+        DUNE_THROW(Exceptions::not_bound_to_an_element_yet, "you need to call bind() first!");
       this->assert_inside_reference_element(point_in_reference_element);
       return smooth_function_.evaluate(geometry_->global(point_in_reference_element), param);
     }
@@ -143,7 +143,7 @@ private:
                                        const Common::Parameter& param = {}) const override final
     {
       if (!geometry_)
-        DUNE_THROW(Exceptions::this_function_is_not_bound_to_an_entity_yet, "");
+        DUNE_THROW(Exceptions::not_bound_to_an_element_yet, "you need to call bind() first!");
       this->assert_inside_reference_element(point_in_reference_element);
       return smooth_function_.jacobian(geometry_->global(point_in_reference_element), param);
     }
@@ -153,7 +153,7 @@ private:
                                          const Common::Parameter& param = {}) const override final
     {
       if (!geometry_)
-        DUNE_THROW(Exceptions::this_function_is_not_bound_to_an_entity_yet, "");
+        DUNE_THROW(Exceptions::not_bound_to_an_element_yet, "you need to call bind() first!");
       this->assert_inside_reference_element(point_in_reference_element);
       return smooth_function_.derivative(alpha, geometry_->global(point_in_reference_element), param);
     }

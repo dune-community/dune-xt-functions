@@ -143,7 +143,7 @@ public:
   const EntityType& entity() const
   {
     if (!entity_)
-      DUNE_THROW(Exceptions::this_function_is_not_bound_to_an_entity_yet, "");
+      DUNE_THROW(Exceptions::not_bound_to_an_element_yet, "you need to call bind() first!");
     return *entity_;
   }
 
