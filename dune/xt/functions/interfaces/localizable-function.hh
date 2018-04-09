@@ -63,11 +63,11 @@ class VisualizationAdapter;
  *
  *        We follow one strong assumption in dune-xt-functions: after being localized to an entity, a local function
  *        (or a set of local functions) has to provide the order which is required to integrate it _exactly_ on this
- *        entity and _should_ be polynomial on an entity. While there exists non-polynomial data functions, we only have
- *        quadratures of finite order and no way to detect discontinuities of functions (thus the order of the local
- *        polynomial approximation must be provided). In addition, we demand that discontinuities may only lie on
- *        intersections (which is not uncommen). This forces the user to really think about the data functions when
- *        implementing/using them, but avoids situations which could not be handled generically later on.
+ *        entity and _should_ coincide with the polynomial on an entity. While there exists non-polynomial data
+ *        functions, we only have quadratures of finite order and no way to detect discontinuities of functions (thus
+ *        the order of the local polynomial approximation must be provided). This encourages the user to really think
+ *        about the data functions when implementing/using them, but avoids situations which could not be handled
+ *        generically later on.
  */
 template <class EntityImp, size_t rangeDim = 1, size_t rangeDimCols = 1, class RangeFieldImp = double>
 class LocalizableFunctionInterface : public Common::ParametricInterface
@@ -96,11 +96,16 @@ public:
   //  typedef Functions::DifferenceFunction<ThisType, ThisType> DifferenceType;
   //  typedef Functions::SumFunction<ThisType, ThisType> SumType;
 
+  explicit LocalizableFunctionInterface(const Common::ParameterType& param_type = {})
+    : Common::ParametricInterface(param_type)
+  {
+  }
+
   virtual ~LocalizableFunctionInterface() = default;
 
   static std::string static_id()
   {
-    return "localizable_function";
+    return "dune.xt.functions.localizable";
   }
 
   /**
@@ -118,12 +123,12 @@ public:
    */
   virtual std::string type() const
   {
-    return "localizable_function";
+    return "dune.xt.functions.localizable";
   }
 
-  virtual const std::string& name() const
+  virtual std::string name() const
   {
-    return "localizable_function";
+    return "dune.xt.functions.localizable";
   }
   /* \} */
 
