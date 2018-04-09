@@ -23,17 +23,14 @@ namespace XT {
 namespace Functions {
 
 
-template <class E_, size_t r_, size_t rC_, class R_>
-class SmoothFunctionAsLocalizableWrapper : public LocalizableFunctionInterface<E_, r_, rC_, R_>
+template <class E, size_t r, size_t rC, class R>
+class SmoothFunctionAsLocalizableWrapper : public LocalizableFunctionInterface<E, r, rC, R>
 {
-  using BaseType = LocalizableFunctionInterface<E_, r_, rC_, R_>;
-  using ThisType = SmoothFunctionAsLocalizableWrapper<E_, r_, rC_, R_>;
+  using BaseType = LocalizableFunctionInterface<E, r, rC, R>;
+  using ThisType = SmoothFunctionAsLocalizableWrapper<E, r, rC, R>;
 
 public:
   using BaseType::d;
-  using BaseType::r;
-  using BaseType::rC;
-  using typename BaseType::R;
   using typename BaseType::EntityType;
   using typename BaseType::LocalFunctionType;
   using SmoothFunctionType = SmoothFunctionInterface<d, r, rC, R>;
@@ -43,7 +40,7 @@ public:
   {
   }
 
-  SmoothFunctionAsLocalizableWrapper(const SmoothFunctionType*&& smooth_function_ptr)
+  SmoothFunctionAsLocalizableWrapper(SmoothFunctionType*&& smooth_function_ptr)
     : smooth_function_storage_(std::move(smooth_function_ptr))
   {
   }
@@ -79,7 +76,7 @@ public:
     return smooth_function_storage_.access().type();
   }
 
-  const std::string& name() const override final
+  std::string name() const override final
   {
     return smooth_function_storage_.access().name();
   }
