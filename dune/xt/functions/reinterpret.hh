@@ -12,24 +12,12 @@
 #ifndef DUNE_XT_FUNCTION_REINTERPRET_HH
 #define DUNE_XT_FUNCTION_REINTERPRET_HH
 
-#include <vector>
-
-#include <dune/common/fvector.hh>
-#include <dune/common/version.hh>
-
-#if DUNE_VERSION_NEWER(DUNE_COMMON, 3, 9) // EXADUNE
 #include <dune/geometry/referenceelements.hh>
-#else
-#include <dune/geometry/referenceelements.hh>
-#endif
 
-#include <dune/xt/common/exceptions.hh>
-#include <dune/xt/common/memory.hh>
 #include <dune/xt/grid/search.hh>
-#include <dune/xt/grid/layers.hh>
-#include <dune/xt/grid/type_traits.hh>
 
-#include <dune/xt/functions/interfaces.hh>
+#include <dune/xt/functions/exceptions.hh>
+#include <dune/xt/functions/interfaces/localizable-function.hh>
 
 namespace Dune {
 namespace XT {
@@ -44,136 +32,233 @@ namespace Functions {
  *        local_function to provide an evaluation for a point on the new grid layer. The physical domain covered by the
  *        new grid layer should thus be contained in the physical domain of the original grid layer. This is mainly used
  *        in the context of prolongations.
- *
- * \note  The current implementation is not thread safe (due to the entity search).
- *
- * \note  There is no way to reliably obtain the local polynomial order of the source, and we thus use the order of the
- *        local_function corresponding to the first entity.
  */
-template <class SourceType, class GridLayerType>
-class ReinterpretFunction : public LocalizableFunctionInterface<XT::Grid::extract_entity_t<GridLayerType>,
-                                                                typename GridLayerType::ctype,
-                                                                GridLayerType::dimension,
-                                                                typename SourceType::RangeFieldType,
-                                                                SourceType::dimRange,
-                                                                SourceType::dimRangeCols>
+template <class SourceGridView,
+          class TargetElement = XT::Grid::extract_entity_t<SourceGridView>,
+          size_t range_dim = 1,
+          size_t range_dim_cols = 1,
+          class RangeField = double>
+class ReinterpretLocalizableFunction
+    : public LocalizableFunctionInterface<TargetElement, range_dim, range_dim_cols, RangeField>
 {
-  static_assert(is_localizable_function<SourceType>::value, "");
-  static_assert(Grid::is_layer<GridLayerType>::value, "");
-  typedef LocalizableFunctionInterface<XT::Grid::extract_entity_t<GridLayerType>,
-                                       typename GridLayerType::ctype,
-                                       GridLayerType::dimension,
-                                       typename SourceType::RangeFieldType,
-                                       SourceType::dimRange,
-                                       SourceType::dimRangeCols>
-      BaseType;
-  typedef ReinterpretFunction<SourceType, GridLayerType> ThisType;
+  static_assert(XT::Grid::is_layer<SourceGridView>::value, "");
+  using ThisType = ReinterpretLocalizableFunction<SourceGridView, TargetElement, range_dim, range_dim_cols, RangeField>;
+  using BaseType = LocalizableFunctionInterface<TargetElement, range_dim, range_dim_cols, RangeField>;
 
 public:
-  using typename BaseType::EntityType;
-  using typename BaseType::DomainFieldType;
-  using BaseType::dimDomain;
-  using typename BaseType::RangeFieldType;
-  using BaseType::dimRange;
-  using BaseType::dimRangeCols;
-  using typename BaseType::LocalfunctionType;
+  using BaseType::r;
+  using BaseType::rC;
+  using typename BaseType::R;
+  using typename BaseType::LocalFunctionType;
 
-private:
-  class ReinterpretLocalfunction
-      : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
-  {
-    typedef LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
-        BaseType;
+  using SourceType = LocalizableFunctionInterface<XT::Grid::extract_entity_t<SourceGridView>, r, rC, R>;
 
-  public:
-    using typename BaseType::DomainType;
-    using typename BaseType::RangeType;
-    using typename BaseType::JacobianRangeType;
-
-    ReinterpretLocalfunction(const EntityType& entity, const size_t order, const ThisType& func)
-      : BaseType(entity)
-      , order_(order)
-      , func_(func)
-      , points_(1)
-    {
-    }
-
-    virtual size_t order(const Common::Parameter& mu = {}) const override final
-    {
-      return order_;
-    }
-
-    void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& mu = {}) const override final
-    {
-      points_[0] = this->entity().geometry().global(xx);
-      const auto source_entity_ptr_unique_ptrs = func_.entity_search_(points_);
-      if (source_entity_ptr_unique_ptrs.size() != 1)
-        DUNE_THROW(XT::Common::Exceptions::reinterpretation_error,
-                   "It was not possible to find a source entity for this point:\n\n"
-                       << points_[0]);
-      const auto& source_entity = *source_entity_ptr_unique_ptrs[0];
-      const auto source_local_function = func_.source_.local_function(source_entity);
-      source_local_function->evaluate(source_entity.geometry().local(points_[0]), ret, mu);
-    } // ... evaluate(...)
-
-    void jacobian(const DomainType& xx, JacobianRangeType& ret, const Common::Parameter& mu = {}) const override final
-    {
-      points_[0] = this->entity().geometry().global(xx);
-      const auto source_entity_ptr_unique_ptrs = func_.entity_search_(points_);
-      if (source_entity_ptr_unique_ptrs.size() != 1)
-        DUNE_THROW(XT::Common::Exceptions::reinterpretation_error,
-                   "It was not possible to find a source entity for this point:\n\n"
-                       << points_[0]);
-      const auto& source_entity = *source_entity_ptr_unique_ptrs[0];
-      const auto source_local_function = func_.source_.local_function(source_entity);
-      source_local_function->jacobian(source_entity.geometry().local(points_[0]), ret, mu);
-    } // ... jacobian(...)
-
-  private:
-    const size_t order_;
-    const ThisType& func_;
-    mutable std::vector<DomainType> points_;
-  }; // class ReinterpretLocalfunction
-
-public:
   static std::string static_id()
   {
     return BaseType::static_id() + ".reinterpret";
   }
 
-  ReinterpretFunction(const SourceType& source, const GridLayerType& source_grid_layer)
-    : source_(source)
-    , source_grid_layer_(source_grid_layer)
-    , entity_search_(source_grid_layer_)
-    , guessed_source_order_(source_.local_function(*source_grid_layer_.template begin<0>())->order())
+  ReinterpretLocalizableFunction(const SourceType& source, const SourceGridView& source_grid_view)
+    : BaseType(source.parameter_type())
+    , source_(source)
+    , source_grid_view_(source_grid_view)
   {
   }
 
-  virtual ~ReinterpretFunction() = default;
-
-  virtual std::unique_ptr<LocalfunctionType> local_function(const EntityType& entity) const
+  std::unique_ptr<LocalFunctionType> local_function() const override final
   {
-    return Common::make_unique<ReinterpretLocalfunction>(entity, guessed_source_order_, *this);
+    return std::make_unique<ReinterpretLocalfunction>(source_, source_grid_view_);
   }
 
-  virtual std::string type() const
+  std::unique_ptr<LocalFunctionType> local_function(const TargetElement& element) const override final
   {
-    return static_id() + "_of_" + source_.type();
+    return std::make_unique<ReinterpretLocalfunction>(source_, source_grid_view_, element);
   }
 
-  virtual std::string name() const
+  std::string type() const
   {
-    return "reinterpretation of " + source_.name();
+    return BaseType::type() + ".reinterpret";
+  }
+
+  std::string name() const
+  {
+    return BaseType::name() + ".reinterpret";
   }
 
 private:
-  friend class ReinterpretLocalfunction;
+  class ReinterpretLocalfunction : public LocalFunctionInterface<TargetElement, r, rC, R>
+  {
+    using BaseType = LocalFunctionInterface<TargetElement, r, rC, R>;
+
+  public:
+    using typename BaseType::D;
+    using BaseType::d;
+    using typename BaseType::DomainType;
+    using typename BaseType::RangeReturnType;
+    using typename BaseType::DerivativeRangeReturnType;
+
+    ReinterpretLocalfunction(const SourceType& source, const SourceGridView& source_grid_view)
+      : BaseType(source.parameter_type())
+      , source_(source)
+      , source_grid_view_(source_grid_view)
+      , source_entity_search_(source_grid_view_)
+      , local_source_(source_.local_function())
+      , source_element_which_contains_complete_target_element_(nullptr)
+      , source_element_which_contains_some_point_of_target_element_(nullptr)
+    {
+    }
+
+    ReinterpretLocalfunction(const SourceType& source,
+                             const SourceGridView& source_grid_view,
+                             const TargetElement& target_element)
+      : BaseType(source.parameter_type())
+      , source_(source)
+      , source_grid_view_(source_grid_view)
+      , source_entity_search_(source_grid_view_)
+      , local_source_(source_.local_function())
+      , source_element_which_contains_complete_target_element_(nullptr)
+      , source_element_which_contains_some_point_of_target_element_(nullptr)
+    {
+      this->bind(target_element);
+    }
+
+  protected:
+    void post_bind(const TargetElement& target_element)
+    {
+      // See if we find a source entity which contais target_element completely. Therefore
+      // * collect all vertices
+      const auto& reference_element = ReferenceElements<D, d>::general(target_element.geometry().type());
+      const auto num_vertices = reference_element.size(1);
+      if (vertices_.size() != num_vertices)
+        vertices_.resize(num_vertices);
+      for (int ii = 0; ii < num_vertices; ++ii)
+        vertices_[ii] = target_element.geometry().global(reference_element.position(ii, 1));
+      // * search for a source entity for each vertex
+      auto source_entity_ptrs = source_entity_search_(vertices_);
+      DUNE_THROW_IF(
+          source_entity_ptrs.size() != num_vertices,
+          Exceptions::reinterpretation_error,
+          "source_entity_ptrs.size() = " << source_entity_ptrs.size() << "\n   num_vertices = " << num_vertices);
+      // * and check if these are all the same
+      if (num_vertices == 1) {
+        source_element_which_contains_complete_target_element_ = std::move(source_entity_ptrs[0]);
+        source_element_which_contains_some_point_of_target_element_ = nullptr;
+        local_source_->bind(*source_element_which_contains_complete_target_element_);
+      } else {
+        int is_same_as_first_one = 0;
+        for (int ii = 1; ii < num_vertices; ++ii)
+          if (source_entity_ptrs[ii] == source_entity_ptrs[0])
+            ++is_same_as_first_one;
+        if (is_same_as_first_one == num_vertices - 1) {
+          source_element_which_contains_complete_target_element_ = std::move(source_entity_ptrs[0]);
+          source_element_which_contains_some_point_of_target_element_ = nullptr;
+          local_source_->bind(*source_element_which_contains_complete_target_element_);
+        } else {
+          // We could not find a single source entity which contains target_element completely.
+          source_element_which_contains_complete_target_element_ = nullptr;
+          source_element_which_contains_some_point_of_target_element_ = std::move(source_entity_ptrs[0]);
+          local_source_->bind(*source_element_which_contains_some_point_of_target_element_);
+        }
+      }
+    } // ... post_bind(...)
+
+  public:
+    /**
+      * \note In some special situations (e.g., if the target element is not completely contained in one source
+      *       element), this may give inaccurate results.
+      **/
+    int order(const Common::Parameter& param = {}) const override final
+    {
+      DUNE_THROW_IF(!source_element_which_contains_complete_target_element_
+                        && !source_element_which_contains_some_point_of_target_element_,
+                    Exceptions::not_bound_to_an_element_yet,
+                    "");
+      return local_source_->order(param);
+    }
+
+    RangeReturnType evaluate(const DomainType& point_in_target_reference_element,
+                             const Common::Parameter& param = {}) const
+    {
+      ensure_local_source_is_bound_for_this_point(point_in_target_reference_element);
+      const auto point_in_global_coordinates = this->entity().geometry().global(point_in_target_reference_element);
+      const auto point_in_source_reference_element =
+          local_source_->entity().geometry().local(point_in_global_coordinates);
+      return local_source_->evaluate(point_in_source_reference_element, param);
+    }
+
+    DerivativeRangeReturnType jacobian(const DomainType& point_in_target_reference_element,
+                                       const Common::Parameter& param = {}) const
+    {
+      ensure_local_source_is_bound_for_this_point(point_in_target_reference_element);
+      const auto point_in_global_coordinates = this->entity().geometry().global(point_in_target_reference_element);
+      const auto point_in_source_reference_element =
+          local_source_->entity().geometry().local(point_in_global_coordinates);
+      return local_source_->jacobian(point_in_source_reference_element, param);
+    }
+
+    DerivativeRangeReturnType derivative(const std::array<size_t, d>& alpha,
+                                         const DomainType& point_in_target_reference_element,
+                                         const Common::Parameter& param = {}) const
+    {
+      ensure_local_source_is_bound_for_this_point(point_in_target_reference_element);
+      const auto point_in_global_coordinates = this->entity().geometry().global(point_in_target_reference_element);
+      const auto point_in_source_reference_element =
+          local_source_->entity().geometry().local(point_in_global_coordinates);
+      return local_source_->derivative(alpha, point_in_source_reference_element, param);
+    }
+
+  private:
+    void ensure_local_source_is_bound_for_this_point(const DomainType& point_in_target_reference_element) const
+    {
+      if (source_element_which_contains_complete_target_element_)
+        return;
+      if (single_point_.size() != 1)
+        single_point_.resize(1);
+      single_point_[0] = this->entity().geometry().global(point_in_target_reference_element);
+      auto source_entity_ptrs = source_entity_search_(single_point_);
+      DUNE_THROW_IF(source_entity_ptrs.size() != 1,
+                    Exceptions::reinterpretation_error,
+                    "source_entity_ptrs.size() = " << source_entity_ptrs.size());
+      source_element_which_contains_some_point_of_target_element_ = std::move(source_entity_ptrs[0]);
+      local_source_->bind(*source_element_which_contains_some_point_of_target_element_);
+    } // ... ensure_local_source_is_bound_for_this_point(...)
+
+    const SourceType& source_;
+    const SourceGridView& source_grid_view_;
+    mutable XT::Grid::EntityInlevelSearch<SourceGridView> source_entity_search_;
+    mutable std::unique_ptr<typename SourceType::LocalFunctionType> local_source_;
+    mutable std::unique_ptr<XT::Grid::extract_entity_t<SourceGridView>>
+        source_element_which_contains_complete_target_element_;
+    mutable std::unique_ptr<XT::Grid::extract_entity_t<SourceGridView>>
+        source_element_which_contains_some_point_of_target_element_;
+    mutable std::vector<DomainType> vertices_;
+    mutable std::vector<DomainType> single_point_;
+  }; // class ReinterpretLocalfunction
 
   const SourceType& source_;
-  const GridLayerType& source_grid_layer_;
-  mutable XT::Grid::EntityInlevelSearch<GridLayerType> entity_search_;
-  const size_t guessed_source_order_;
-}; // class ReinterpretFunction
+  const SourceGridView& source_grid_view_;
+}; // class ReinterpretLocalizableFunction
+
+
+template <class TargetElement, class SourceGridView, size_t r, size_t rC, class R>
+std::enable_if_t<XT::Grid::is_layer<SourceGridView>::value,
+                 ReinterpretLocalizableFunction<SourceGridView, TargetElement, r, rC, R>>
+reinterpret(const LocalizableFunctionInterface<XT::Grid::extract_entity_t<SourceGridView>, r, rC, R>& source,
+            const SourceGridView& source_grid_view)
+{
+  return ReinterpretLocalizableFunction<SourceGridView, TargetElement, r, rC, R>(source, source_grid_view);
+}
+
+
+template <class SourceGridView, size_t r, size_t rC, class R, class TargetGridView>
+std::enable_if_t<XT::Grid::is_layer<SourceGridView>::value && XT::Grid::is_layer<TargetGridView>::value,
+                 ReinterpretLocalizableFunction<SourceGridView, XT::Grid::extract_entity_t<TargetGridView>, r, rC, R>>
+reinterpret(const LocalizableFunctionInterface<XT::Grid::extract_entity_t<SourceGridView>, r, rC, R>& source,
+            const SourceGridView& source_grid_view,
+            const TargetGridView& /*target_grid_view*/)
+{
+  return reinterpret<XT::Grid::extract_entity_t<TargetGridView>>(source, source_grid_view);
+}
 
 
 } // namespace Functions

@@ -27,6 +27,10 @@ class not_bound_to_an_element_yet : public Grid::Exceptions::not_bound_to_an_ele
 {
 };
 
+class reinterpretation_error : public Dune::Exception
+{
+};
+
 
 } // namespace Exceptions
 } // namespace Functions
