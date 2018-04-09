@@ -67,7 +67,7 @@ public:
                        const Common::ParameterType& param_type = {},
                        JacobianLambdaType jacobian_lambda = default_jacobian_lambda(),
                        DerivativeLambdaType derivative_lambda = default_derivative_lambda())
-    : order_lambda_(default_order_lambda(ord))
+    : order_lambda_([=](const auto& /*param*/) { return ord; })
     , evaluate_lambda_(evaluate_lambda)
     , jacobian_lambda_(jacobian_lambda)
     , derivative_lambda_(derivative_lambda)
@@ -134,11 +134,6 @@ public:
    * \name ´´These methods may be used to provide defaults on construction.''
    * \{
    */
-
-  static OrderLambdaType default_order_lambda(const int ord)
-  {
-    return [=](const Common::Parameter& /*mu*/ = {}) { return ord; };
-  }
 
   static EvaluateLambdaType default_evaluate_lambda()
   {
