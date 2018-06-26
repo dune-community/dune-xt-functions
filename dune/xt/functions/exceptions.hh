@@ -31,6 +31,10 @@ class reinterpretation_error : public Dune::Exception
 {
 };
 
+class parameter_error : public Common::Exceptions::parameter_error
+{
+};
+
 
 } // namespace Exceptions
 } // namespace Functions
