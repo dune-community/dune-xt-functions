@@ -134,7 +134,7 @@ struct DerivativeRangeTypeSelector
     if (arg.size() < r)
       arg.resize(r);
     for (size_t ii = 0; ii < r; ++ii)
-      if (arg[ii].rows() < rC || arg.cols() < d)
+      if (arg[ii].rows() < rC || arg[ii].cols() < d)
         arg[ii].resize(rC, d);
   }
 
