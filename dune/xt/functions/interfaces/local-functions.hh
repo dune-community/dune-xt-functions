@@ -22,6 +22,7 @@
 #include <dune/geometry/referenceelements.hh>
 
 #include <dune/xt/common/parameter.hh>
+#include <dune/xt/grid/entity.hh>
 
 namespace Dune {
 namespace XT {
@@ -213,6 +214,33 @@ protected:
     return reference_element.checkInside(xx);
 #else // DUNE_XT_FUNCTIONS_DISABLE_CHECKS
     return true;
+#endif
+  }
+
+  void assert_valid_point(const DomainType&
+#ifndef DUNE_XT_FUNCTIONS_DISABLE_CHECKS
+                              xx
+#else
+/*xx*/
+#endif
+                          ) const
+  {
+#ifndef DUNE_XT_FUNCTIONS_DISABLE_CHECKS
+    const auto& reference_element = ReferenceElements<DomainFieldType, dimDomain>::general(entity().type());
+    const auto tolerance = XT::Common::FloatCmp::DefaultEpsilon<DomainFieldType>::value();
+    const bool inside =
+        Impl::template checkInside<DomainFieldType, dimDomain>(reference_element.type().id(), dimDomain, xx, tolerance);
+
+    if (!inside) {
+      auto pp = entity().geometry().global(xx);
+      std::stringstream ent_str;
+      const int max_precision = std::numeric_limits<DomainFieldType>::digits10 + 1;
+      ent_str << std::setprecision(max_precision);
+      ent_str << "point " << pp << " not inside entity ";
+      XT::Grid::print_entity(entity(), Common::Typename<EntityType>::value(), ent_str);
+      ent_str << "\ncheckInside tolerance " << tolerance;
+      DUNE_THROW(XT::Common::Exceptions::debug_assertion, ent_str.str());
+    }
 #endif
   }
 
