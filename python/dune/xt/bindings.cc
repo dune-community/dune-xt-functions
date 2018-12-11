@@ -132,7 +132,8 @@ PYBIND11_MODULE(_functions, m)
   addbind_for_Grid<Dune::YaspGrid<1, Dune::EquidistantOffsetCoordinates<double, 1>>>(m);
   addbind_for_Grid<Dune::YaspGrid<2, Dune::EquidistantOffsetCoordinates<double, 2>>>(m);
 #if HAVE_DUNE_ALUGRID
-  addbind_for_Grid<Dune::ALUGrid<2, 2, Dune::simplex, Dune::conforming>>(m);
+  //  addbind_for_Grid<Dune::ALUGrid<2, 2, Dune::simplex, Dune::conforming>>(m);
+  addbind_for_Grid<Dune::ALUGrid<2, 2, Dune::simplex, Dune::nonconforming>>(m);
 #endif
   //#if HAVE_UG
   //  addbind_for_Grid<Dune::UGGrid<2>>(m, "2d_simplex_uggrid");
