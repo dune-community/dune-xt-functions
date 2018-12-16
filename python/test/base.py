@@ -19,5 +19,15 @@ def test_load_all():
     load_all_submodule(xtc)
 
 
-    func = xtf.make_constant_function_1x1(grid, 1)
-    func = xtf.make_constant_function_2x1(grid, 1)
+@pytest.fixture(params=xtg.types.available_types)
+def _grid_provider_factory(request):
+    maker_str='make_cube_grid__{}'
+    fn = maker_str.format(request.param)
+    maker = getattr(xtg.provider, fn)
+    return maker()
+
+
+def test_create_functions(_grid_provider_factory):
+    grid = _grid_provider_factory
+    func = xtf.make_expression_function_1x1(
+        grid, 'x', '1+(cos(0.5*pi*x[0])*cos(0.5*pi*x[1]))', order=2, name='lambda_0')
