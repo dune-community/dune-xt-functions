@@ -64,28 +64,6 @@ bind_Spe10Model1Function(pybind11::module& m, const std::string& grid_id)
   typedef LocalizableFunctionInterface<E, D, d, R, r, rC> I;
   typedef Spe10::Model1Function<E, D, d, R, r, rC> C;
 
-  py::class_<C, I> c(
-      m,
-      std::string("Spe10Model1Function__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
-          .c_str(),
-      std::string("Spe10Model1Function__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
-          .c_str());
-
-  c.def(py::init<const std::string&,
-                 const Common::FieldVector<D, d>&,
-                 const Common::FieldVector<D, d>&,
-                 const R&,
-                 const R&,
-                 const std::string>(),
-        "filename"_a,
-        "lower_left"_a,
-        "upper_right"_a,
-        "min"_a = Spe10::internal::model1_min_value,
-        "max"_a = Spe10::internal::model1_max_value,
-        "name"_a = C::static_id());
-
-  c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
-
   const std::string make_name = "make_spe10_model1_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
   m.def(std::string(make_name).c_str(),
         [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
@@ -117,6 +95,28 @@ bind_Spe10Model1Function(pybind11::module& m, const std::string& grid_id)
         "min"_a = Spe10::internal::model1_min_value,
         "max"_a = Spe10::internal::model1_max_value,
         "name"_a = C::static_id());
+
+  py::class_<C, I> c(
+      m,
+      std::string("Spe10Model1Function__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
+          .c_str(),
+      std::string("Spe10Model1Function__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
+          .c_str());
+
+  c.def(py::init<const std::string&,
+                 const Common::FieldVector<D, d>&,
+                 const Common::FieldVector<D, d>&,
+                 const R&,
+                 const R&,
+                 const std::string>(),
+        "filename"_a,
+        "lower_left"_a,
+        "upper_right"_a,
+        "min"_a = Spe10::internal::model1_min_value,
+        "max"_a = Spe10::internal::model1_max_value,
+        "name"_a = C::static_id());
+
+  c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
 
   return c;
 } // ... bind_Spe10Model1Function(...)

@@ -50,36 +50,6 @@ class CutoffFunction
       typedef Functions::ESV2007::CutoffFunction<ScalarFunction, void> type_single_diffusion;
       typedef Functions::ESV2007::CutoffFunction<ScalarFunction, TensorFunction> type;
 
-      py::class_<type_single_diffusion, ScalarFunction> c_single_diffusion(
-          m,
-          Common::to_camel_case(
-              "esv2007_cutoff_function_single_diffusion_from_" + XT::Grid::bindings::grid_name<G>::value() + "_to_1x1")
-              .c_str(),
-          "ESV2007::CutoffFunction");
-
-      c_single_diffusion.def(py::init<const ScalarFunction&, const R, const std::string>(),
-                             "diffusion"_a,
-                             "poincare_constant"_a = 1.0 / (M_PIl * M_PIl),
-                             "nm"_a = type_single_diffusion::static_id());
-
-      c_single_diffusion.def_property_readonly(
-          "static_id", [](const type_single_diffusion& /*self*/) { return type_single_diffusion::static_id(); });
-
-      py::class_<type, ScalarFunction> c(
-          m,
-          Common::to_camel_case("esv2007_cutoff_function_diffusion_factor_and_tensor_from_"
-                                + XT::Grid::bindings::grid_name<G>::value()
-                                + "_to_1x1")
-              .c_str(),
-          "ESV2007::CutoffFunction");
-
-      c.def(py::init<const ScalarFunction&, const TensorFunction&, const R, const std::string>(),
-            "diffusion_factor"_a,
-            "diffusion_tensor"_a,
-            "poincare_constant"_a = 1.0 / (M_PIl * M_PIl),
-            "nm"_a = type::static_id());
-      c.def_property_readonly("static_id", [](const type& /*self*/) { return type::static_id(); });
-
       const std::string make_name = "make_esv2007_cutoff_function";
       m.def(std::string(make_name + "_single_diffusion_to_1x1").c_str(),
             [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
@@ -127,6 +97,38 @@ class CutoffFunction
             "name"_a = type::static_id(),
             py::keep_alive<0, 2>(),
             py::keep_alive<0, 3>());
+
+      py::class_<type_single_diffusion, ScalarFunction> c_single_diffusion(
+          m,
+          Common::to_camel_case(
+              "esv2007_cutoff_function_single_diffusion_from_" + XT::Grid::bindings::grid_name<G>::value() + "_to_1x1")
+              .c_str(),
+          "ESV2007::CutoffFunction");
+
+      c_single_diffusion.def(py::init<const ScalarFunction&, const R, const std::string>(),
+                             "diffusion"_a,
+                             "poincare_constant"_a = 1.0 / (M_PIl * M_PIl),
+                             "nm"_a = type_single_diffusion::static_id());
+
+      c_single_diffusion.def_property_readonly(
+          "static_id", [](const type_single_diffusion& /*self*/) { return type_single_diffusion::static_id(); });
+
+      py::class_<type, ScalarFunction> c(
+          m,
+          Common::to_camel_case("esv2007_cutoff_function_diffusion_factor_and_tensor_from_"
+                                + XT::Grid::bindings::grid_name<G>::value()
+                                + "_to_1x1")
+              .c_str(),
+          "ESV2007::CutoffFunction");
+
+      c.def(py::init<const ScalarFunction&, const TensorFunction&, const R, const std::string>(),
+            "diffusion_factor"_a,
+            "diffusion_tensor"_a,
+            "poincare_constant"_a = 1.0 / (M_PIl * M_PIl),
+            "nm"_a = type::static_id());
+      c.def_property_readonly("static_id", [](const type& /*self*/) { return type::static_id(); });
+
+
     }
   }; // struct helper<true, ...>
 

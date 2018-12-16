@@ -57,17 +57,6 @@ bind_ConstantFunction(pybind11::module& m, const std::string& grid_id)
   typedef LocalizableFunctionInterface<E, D, d, R, r, rC> I;
   typedef ConstantFunction<E, D, d, R, r, rC> C;
 
-  py::class_<C, I> c(
-      m,
-      std::string("ConstantFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC)).c_str(),
-      std::string("ConstantFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
-          .c_str());
-
-  c.def(py::init<typename C::RangeType, std::string>(), "value"_a, "name"_a = C::static_id());
-  c.def(py::init<typename C::RangeFieldType, std::string>(), "value"_a, "name"_a = C::static_id());
-
-  c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
-
   const std::string make_name = "make_constant_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
   m.def(std::string(make_name).c_str(),
         [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
@@ -97,6 +86,17 @@ bind_ConstantFunction(pybind11::module& m, const std::string& grid_id)
         "grid_provider"_a,
         "value"_a,
         "name"_a = C::static_id());
+
+  py::class_<C, I> c(
+      m,
+      std::string("ConstantFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC)).c_str(),
+      std::string("ConstantFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC))
+          .c_str());
+
+  c.def(py::init<typename C::RangeType, std::string>(), "value"_a, "name"_a = C::static_id());
+  c.def(py::init<typename C::RangeFieldType, std::string>(), "value"_a, "name"_a = C::static_id());
+
+  c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
 
   return c;
 } // ... bind_ConstantFunction(...)

@@ -93,21 +93,84 @@ bind_ExpressionFunction(pybind11::module& m, const std::string& grid_id)
 
   const std::string c_name =
       "ExpressionFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC);
+
+  const std::string make_name = (boost::format("make_expression_function_%dx%d") % r % rC).str();
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
+           const std::string& variable,
+           const std::string& expression,
+           const size_t& order,
+           const std::string& name,
+           const std::vector<std::string>& gradient_expressions) {
+          return C(variable, expression, order, name, gradient_expressions);
+        },
+        "grid_provider"_a,
+        "variable"_a,
+        "expression"_a,
+        "order"_a,
+        "name"_a = C::static_id(),
+        "gradient_expressions"_a = std::vector<std::string>());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
+           const std::string& variable,
+           const std::string& expression,
+           const size_t& order,
+           const std::string& name,
+           const std::vector<std::string>& gradient_expressions) {
+          return C(variable, expression, order, name, gradient_expressions);
+        },
+        "grid_provider"_a,
+        "variable"_a,
+        "expression"_a,
+        "order"_a,
+        "name"_a = C::static_id(),
+        "gradient_expressions"_a = std::vector<std::string>());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
+           const std::string& variable,
+           const std::vector<std::vector<std::string>>& expression,
+           const size_t& order,
+           const std::string& name,
+           const std::vector<std::vector<std::vector<std::string>>>& gradient_expressions) {
+          return C(variable, expression, order, name, gradient_expressions);
+        },
+        "grid_provider"_a,
+        "variable"_a,
+        "expression"_a,
+        "order"_a,
+        "name"_a = C::static_id(),
+        "gradient_expressions"_a = std::vector<std::vector<std::vector<std::string>>>());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
+           const std::string& variable,
+           const std::vector<std::vector<std::string>>& expression,
+           const size_t& order,
+           const std::string& name,
+           const std::vector<std::vector<std::vector<std::string>>>& gradient_expressions) {
+          return C(variable, expression, order, name, gradient_expressions);
+        },
+        "grid_provider"_a,
+        "variable"_a,
+        "expression"_a,
+        "order"_a,
+        "name"_a = C::static_id(),
+        "gradient_expressions"_a = std::vector<std::vector<std::vector<std::string>>>());
+
   py::class_<C, I> c(m, std::string(c_name).c_str(), std::string(c_name).c_str());
 
   internal::addbind_ExpressionFunction_scalar_ctor<r, rC>()(c, C::static_id());
   c.def(
-      py::init<const std::string, const std::string, const size_t, const std::string, const std::vector<std::string>>(),
-      "variable"_a,
-      "expression"_a,
-      "order"_a,
-      "name"_a = C::static_id(),
-      "gradient_expressions"_a = std::vector<std::string>());
+          py::init<const std::string, const std::string, const size_t, const std::string, const std::vector<std::string>>(),
+          "variable"_a,
+          "expression"_a,
+          "order"_a,
+          "name"_a = C::static_id(),
+          "gradient_expressions"_a = std::vector<std::string>());
   c.def(py::init<const std::string,
-                 const std::vector<std::vector<std::string>>,
-                 const size_t,
-                 const std::string,
-                 const std::vector<std::vector<std::vector<std::string>>>>(),
+                const std::vector<std::vector<std::string>>,
+                const size_t,
+                const std::string,
+                const std::vector<std::vector<std::vector<std::string>>>>(),
         "variable"_a,
         "expressions"_a,
         "order"_a,
@@ -115,69 +178,6 @@ bind_ExpressionFunction(pybind11::module& m, const std::string& grid_id)
         "gradient_expressions"_a = std::vector<std::vector<std::string>>());
 
   c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
-
-  const std::string make_name = "make_expression_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
-           const std::string& variable,
-           const std::string& expression,
-           const size_t& order,
-           const std::string& name,
-           const std::vector<std::string>& gradient_expressions) {
-          return C(variable, expression, order, name, gradient_expressions);
-        },
-        "grid_provider"_a,
-        "variable"_a,
-        "expression"_a,
-        "order"_a,
-        "name"_a = C::static_id(),
-        "gradient_expressions"_a = std::vector<std::string>());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
-           const std::string& variable,
-           const std::string& expression,
-           const size_t& order,
-           const std::string& name,
-           const std::vector<std::string>& gradient_expressions) {
-          return C(variable, expression, order, name, gradient_expressions);
-        },
-        "grid_provider"_a,
-        "variable"_a,
-        "expression"_a,
-        "order"_a,
-        "name"_a = C::static_id(),
-        "gradient_expressions"_a = std::vector<std::string>());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/,
-           const std::string& variable,
-           const std::vector<std::vector<std::string>>& expression,
-           const size_t& order,
-           const std::string& name,
-           const std::vector<std::vector<std::vector<std::string>>>& gradient_expressions) {
-          return C(variable, expression, order, name, gradient_expressions);
-        },
-        "grid_provider"_a,
-        "variable"_a,
-        "expression"_a,
-        "order"_a,
-        "name"_a = C::static_id(),
-        "gradient_expressions"_a = std::vector<std::vector<std::vector<std::string>>>());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
-           const std::string& variable,
-           const std::vector<std::vector<std::string>>& expression,
-           const size_t& order,
-           const std::string& name,
-           const std::vector<std::vector<std::vector<std::string>>>& gradient_expressions) {
-          return C(variable, expression, order, name, gradient_expressions);
-        },
-        "grid_provider"_a,
-        "variable"_a,
-        "expression"_a,
-        "order"_a,
-        "name"_a = C::static_id(),
-        "gradient_expressions"_a = std::vector<std::vector<std::vector<std::string>>>());
-
   return c;
 } // ... bind_ExpressionFunction(...)
 

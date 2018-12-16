@@ -52,40 +52,39 @@ bind_IndicatorFunction(pybind11::module& m, const std::string& grid_id)
 
   const std::string classname =
       std::string("IndicatorFunction__" + grid_id + "_to_" + Common::to_string(r) + "x" + Common::to_string(rC));
+  const std::string make_name = "make_indicator_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
+            return C(values, name);
+        },
+        "grid_provider"_a,
+        "values"_a,
+        "name"_a = C::static_id());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
+           const IntervalVector& value,
+           const std::string& name) { return C(value, name); },
+        "grid_provider"_a,
+        "values"_a,
+        "name"_a = C::static_id());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
+            return C(values, name);
+        },
+        "grid_provider"_a,
+        "values"_a,
+        "name"_a = C::static_id());
+  m.def(std::string(make_name).c_str(),
+        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
+           const IntervalVector& value,
+           const std::string& name) { return C(value, name); },
+        "grid_provider"_a,
+        "values"_a,
+        "name"_a = C::static_id());
   py::class_<C, I> c(m, classname.c_str(), classname.c_str());
   c.def(py::init<CornerVector, std::string>(), "values"_a, "name"_a = C::static_id());
   c.def(py::init<IntervalVector, std::string>(), "values"_a, "name"_a = C::static_id());
   c.def_property_readonly("static_id", [](const C& /*self*/) { return C::static_id(); });
-
-  const std::string make_name = "make_indicator_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
-          return C(values, name);
-        },
-        "grid_provider"_a,
-        "values"_a,
-        "name"_a = C::static_id());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
-           const IntervalVector& value,
-           const std::string& name) { return C(value, name); },
-        "grid_provider"_a,
-        "values"_a,
-        "name"_a = C::static_id());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
-          return C(values, name);
-        },
-        "grid_provider"_a,
-        "values"_a,
-        "name"_a = C::static_id());
-  m.def(std::string(make_name).c_str(),
-        [](const Grid::GridProvider<G, Grid::DD::SubdomainGrid<G>>& /*grid*/,
-           const IntervalVector& value,
-           const std::string& name) { return C(value, name); },
-        "grid_provider"_a,
-        "values"_a,
-        "name"_a = C::static_id());
   return c;
 } // ... bind_IndicatorFunction(...)
 
