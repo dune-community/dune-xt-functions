@@ -29,14 +29,11 @@ namespace XT {
 namespace Functions {
 
 template <class G, size_t d, size_t r, size_t rC>
-typename std::enable_if<Grid::is_grid<G>::value,
-                        pybind11::class_<IndicatorFunction<typename G::template Codim<0>::Entity,
-                                                           typename G::ctype,
-                                                           d,
-                                                           double,
-                                                           r,
-                                                           rC>>>::type
-bind_IndicatorFunction(pybind11::module& m, const std::string& grid_id)
+typename std::enable_if<
+    Grid::is_grid<G>::value,
+    pybind11::class_<IndicatorFunction<typename G::template Codim<0>::Entity, typename G::ctype, d, double, r, rC>>>::
+    type
+    bind_IndicatorFunction(pybind11::module& m, const std::string& grid_id)
 {
   namespace py = pybind11;
   using namespace pybind11::literals;
@@ -55,7 +52,7 @@ bind_IndicatorFunction(pybind11::module& m, const std::string& grid_id)
   const std::string make_name = "make_indicator_function_" + Common::to_string(r) + "x" + Common::to_string(rC);
   m.def(std::string(make_name).c_str(),
         [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
-            return C(values, name);
+          return C(values, name);
         },
         "grid_provider"_a,
         "values"_a,
@@ -69,7 +66,7 @@ bind_IndicatorFunction(pybind11::module& m, const std::string& grid_id)
         "name"_a = C::static_id());
   m.def(std::string(make_name).c_str(),
         [](const Grid::GridProvider<G, Grid::none_t>& /*grid*/, const CornerVector& values, const std::string& name) {
-            return C(values, name);
+          return C(values, name);
         },
         "grid_provider"_a,
         "values"_a,

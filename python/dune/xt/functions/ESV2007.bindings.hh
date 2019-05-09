@@ -100,8 +100,8 @@ class CutoffFunction
 
       py::class_<type_single_diffusion, ScalarFunction> c_single_diffusion(
           m,
-          Common::to_camel_case(
-              "esv2007_cutoff_function_single_diffusion_from_" + XT::Grid::bindings::grid_name<G>::value() + "_to_1x1")
+          Common::to_camel_case("esv2007_cutoff_function_single_diffusion_from_"
+                                + XT::Grid::bindings::grid_name<G>::value() + "_to_1x1")
               .c_str(),
           "ESV2007::CutoffFunction");
 
@@ -116,8 +116,7 @@ class CutoffFunction
       py::class_<type, ScalarFunction> c(
           m,
           Common::to_camel_case("esv2007_cutoff_function_diffusion_factor_and_tensor_from_"
-                                + XT::Grid::bindings::grid_name<G>::value()
-                                + "_to_1x1")
+                                + XT::Grid::bindings::grid_name<G>::value() + "_to_1x1")
               .c_str(),
           "ESV2007::CutoffFunction");
 
@@ -127,17 +126,13 @@ class CutoffFunction
             "poincare_constant"_a = 1.0 / (M_PIl * M_PIl),
             "nm"_a = type::static_id());
       c.def_property_readonly("static_id", [](const type& /*self*/) { return type::static_id(); });
-
-
     }
   }; // struct helper<true, ...>
 
   template <bool anything>
   struct helper<false, anything>
   {
-    static void bind(pybind11::module& /*m*/)
-    {
-    }
+    static void bind(pybind11::module& /*m*/) {}
   };
 
 public:

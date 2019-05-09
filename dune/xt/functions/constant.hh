@@ -77,8 +77,7 @@ struct EyeMatrix<K, 1, 1>
 
 template <class K, int dim>
 struct UnitMatrix : EyeMatrix<K, dim, dim>
-{
-};
+{};
 
 template <class K, int dim>
 typename UnitMatrix<K, dim>::type unit_matrix()
@@ -153,7 +152,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class ConstantFunction
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols> BaseType;
   typedef ConstantFunction<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols> ThisType;
@@ -203,14 +202,12 @@ public:
   explicit ConstantFunction(const RangeType& constant, const std::string name_in = static_id())
     : constant_(constant)
     , name_(name_in)
-  {
-  }
+  {}
 
   explicit ConstantFunction(const RangeFieldImp& constant, const std::string name_in = static_id())
     : constant_(constant)
     , name_(name_in)
-  {
-  }
+  {}
 
 #if !DUNE_XT_WITH_PYTHON_BINDINGS
   ConstantFunction(const ThisType& other) = default;

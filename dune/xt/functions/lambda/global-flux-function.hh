@@ -54,23 +54,23 @@ FluxType F([](const typename F::DomainType& x,
  */
 template <class U, class R, size_t r, size_t rC>
 class GlobalLambdaFluxFunction<U, 0, R, r, rC>
-    : public GlobalFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC>
+  : public GlobalFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC>
 {
   typedef GlobalFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC> BaseType;
 
 public:
-  using typename BaseType::DomainType;
-  using typename BaseType::StateRangeType;
-  using typename BaseType::RangeType;
-  using typename BaseType::RangeFieldType;
-  using typename BaseType::ColRangeType;
-  using typename BaseType::PartialXRangeType;
-  using typename BaseType::PartialURangeType;
-  using typename BaseType::ColPartialXRangeType;
-  using typename BaseType::ColPartialURangeType;
   using BaseType::dimDomain;
   using BaseType::dimRange;
   using BaseType::dimRangeCols;
+  using typename BaseType::ColPartialURangeType;
+  using typename BaseType::ColPartialXRangeType;
+  using typename BaseType::ColRangeType;
+  using typename BaseType::DomainType;
+  using typename BaseType::PartialURangeType;
+  using typename BaseType::PartialXRangeType;
+  using typename BaseType::RangeFieldType;
+  using typename BaseType::RangeType;
+  using typename BaseType::StateRangeType;
 
   typedef std::function<RangeType(const DomainType&, const StateRangeType&, const Common::Parameter&)> LambdaType;
   typedef std::function<size_t(const Common::Parameter&)> OrderLambdaType;

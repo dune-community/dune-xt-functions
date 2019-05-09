@@ -60,10 +60,10 @@ private:
     typedef LocalfunctionInterface<E, D, d, R, r, rC> BaseType;
 
   public:
-    using typename BaseType::EntityType;
     using typename BaseType::DomainType;
-    using typename BaseType::RangeType;
+    using typename BaseType::EntityType;
     using typename BaseType::JacobianRangeType;
+    using typename BaseType::RangeType;
 
     typedef std::function<RangeType(const EntityType&, const DomainType&, const Common::Parameter&)> LambdaType;
     typedef std::function<size_t(const Common::Parameter&)> OrderLambdaType;
@@ -80,8 +80,7 @@ private:
       , order_lambda_(order_lambda)
       , param_type_(param_type)
       , jacobian_lambda_(jacobian_lambda)
-    {
-    }
+    {}
 
     virtual size_t order(const XT::Common::Parameter& mu = {}) const override final
     {
@@ -139,8 +138,7 @@ public:
     , param_type_(param_type)
     , name_(nm)
     , jacobian_lambda_(jacobian_lambda)
-  {
-  }
+  {}
 
   LocalLambdaFunction(LambdaType lambda,
                       OrderLambdaType order_lambda,
@@ -157,8 +155,7 @@ public:
     , param_type_(param_type)
     , name_(nm)
     , jacobian_lambda_(jacobian_lambda)
-  {
-  }
+  {}
 
   const Common::ParameterType& parameter_type() const override final
   {

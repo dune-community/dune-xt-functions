@@ -42,11 +42,11 @@ class ParametricExpressionFunction<E, D, d, R, r, 1> : public GlobalFunctionInte
   typedef DynamicMathExpressionBase<D, R, r> ActualFunctionType;
 
 public:
-  using typename BaseType::DomainType;
   using BaseType::dimDomain;
-  using typename BaseType::RangeType;
-  using typename BaseType::JacobianRangeType;
   using BaseType::dimRange;
+  using typename BaseType::DomainType;
+  using typename BaseType::JacobianRangeType;
+  using typename BaseType::RangeType;
 
   static std::string static_id()
   {
@@ -68,8 +68,7 @@ public:
     if (expressions.size() != dimRange)
       DUNE_THROW(Common::Exceptions::shapes_do_not_match,
                  "dimRange: " << size_t(dimRange) << "\n   "
-                              << "expressions.size(): "
-                              << expressions.size());
+                              << "expressions.size(): " << expressions.size());
     std::vector<std::string> variables;
     for (const auto& key : param_type_.keys()) {
       const size_t value_size = param_type_.get(key);
@@ -121,8 +120,7 @@ public:
       if (parsed_mu.type() != param_type_)
         DUNE_THROW(Common::Exceptions::parameter_error,
                    "parameter_type(): " << param_type_ << "\n   "
-                                        << "mu.type(): "
-                                        << mu.type());
+                                        << "mu.type(): " << mu.type());
     }
     DynamicVector<D> args(num_parameter_variables_ + dimDomain);
     size_t II = 0;
@@ -139,7 +137,7 @@ public:
     function_->evaluate(args, ret);
 
 #ifndef NDEBUG
-#ifndef DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
+#  ifndef DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
     bool failure = false;
     std::string error_type;
     for (size_t rr = 0; rr < dimRange; ++rr) {
@@ -156,26 +154,15 @@ public:
       if (failure)
         DUNE_THROW(Common::Exceptions::internal_error,
                    "evaluating this function yielded:     "
-                       << error_type
-                       << "\n   "
-                       << "The variables of this function are:   "
-                       << function_->variables()
-                       << "\n   "
-                       << "The expressions of this function are: "
-                       << function_->expressions()
-                       << "\n   "
-                       << "You evaluated it with            xx : "
-                       << xx
-                       << "\n   "
-                       << "                                 mu : "
-                       << mu
-                       << "\n   "
-                       << "The result was:                       "
-                       << ret[rr]
-                       << "\n\n"
+                       << error_type << "\n   "
+                       << "The variables of this function are:   " << function_->variables() << "\n   "
+                       << "The expressions of this function are: " << function_->expressions() << "\n   "
+                       << "You evaluated it with            xx : " << xx << "\n   "
+                       << "                                 mu : " << mu << "\n   "
+                       << "The result was:                       " << ret[rr] << "\n\n"
                        << "You can disable this check by defining DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS\n");
     }
-#endif // DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
+#  endif // DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
 #endif // NDEBUG
   } // ... evaluate(...)
 

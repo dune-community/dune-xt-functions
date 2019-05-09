@@ -29,8 +29,7 @@ namespace internal {
 
 template <class L, class R, internal::Combination comb>
 struct get_combined
-{
-}; // struct get_combined
+{}; // struct get_combined
 
 template <class L, class R>
 struct get_combined<L, R, internal::Combination::difference>
@@ -128,9 +127,8 @@ struct Divergence
         py::class_<DivergenceFunction<LocalizableFunctionInterface<E, D, d, R, d, 1>>,
                    LocalizableFunctionInterface<E, D, d, R, 1, 1>>(
             m,
-            Common::to_camel_case(
-                "divergence_of_function_from_" + Grid::bindings::grid_name<G>::value() + "_to_" + to_string(r) + "x"
-                + to_string(rC))
+            Common::to_camel_case("divergence_of_function_from_" + Grid::bindings::grid_name<G>::value() + "_to_"
+                                  + to_string(r) + "x" + to_string(rC))
                 .c_str(),
             "DivergenceFunction");
       } catch (std::runtime_error&) {
@@ -151,8 +149,7 @@ struct Divergence
     template <class E, class D, class R>
     static void addbind(pybind11::module& /*m*/,
                         pybind11::class_<LocalizableFunctionInterface<E, D, d, R, r, rC>>& /*c*/)
-    {
-    }
+    {}
   }; // struct helper<..., false>
 
   template <class E, class D, size_t d, class R, size_t r, size_t rC>
@@ -167,12 +164,8 @@ struct Divergence
 
 
 template <class G, size_t r, size_t rC>
-pybind11::class_<LocalizableFunctionInterface<typename G::template Codim<0>::Entity,
-                                              typename G::ctype,
-                                              G::dimension,
-                                              double,
-                                              r,
-                                              rC>>
+pybind11::class_<
+    LocalizableFunctionInterface<typename G::template Codim<0>::Entity, typename G::ctype, G::dimension, double, r, rC>>
 bind_LocalizableFunctionInterface(pybind11::module& m, const std::string& grid_id)
 {
   namespace py = pybind11;
@@ -251,8 +244,7 @@ bind_LocalizableFunctionInterface(pybind11::module& m, const std::string& grid_i
             DUNE_THROW(
                 XT::Common::Exceptions::wrong_input_given,
                 "Given layer has to be one of ('leaf', 'level', 'dd_subdomain', 'dd_subdomain_oversampled'), is '"
-                    << layer
-                    << "'!");
+                    << layer << "'!");
         },
         "dd_grid_provider"_a,
         "layer"_a = "leaf",

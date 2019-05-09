@@ -18,9 +18,9 @@
 #include <dune/common/version.hh>
 
 #if DUNE_VERSION_NEWER(DUNE_COMMON, 3, 9) // EXADUNE
-#include <dune/geometry/referenceelements.hh>
+#  include <dune/geometry/referenceelements.hh>
 #else
-#include <dune/geometry/referenceelements.hh>
+#  include <dune/geometry/referenceelements.hh>
 #endif
 
 #include <dune/xt/common/memory.hh>
@@ -51,12 +51,13 @@ namespace Functions {
  *        local_function corresponding to the first entity.
  */
 template <class SourceType, class GridLayerType>
-class ReinterpretFunction : public LocalizableFunctionInterface<XT::Grid::extract_entity_t<GridLayerType>,
-                                                                typename GridLayerType::ctype,
-                                                                GridLayerType::dimension,
-                                                                typename SourceType::RangeFieldType,
-                                                                SourceType::dimRange,
-                                                                SourceType::dimRangeCols>
+class ReinterpretFunction
+  : public LocalizableFunctionInterface<XT::Grid::extract_entity_t<GridLayerType>,
+                                        typename GridLayerType::ctype,
+                                        GridLayerType::dimension,
+                                        typename SourceType::RangeFieldType,
+                                        SourceType::dimRange,
+                                        SourceType::dimRangeCols>
 {
   static_assert(is_localizable_function<SourceType>::value, "");
   static_assert(Grid::is_layer<GridLayerType>::value, "");
@@ -70,33 +71,32 @@ class ReinterpretFunction : public LocalizableFunctionInterface<XT::Grid::extrac
   typedef ReinterpretFunction<SourceType, GridLayerType> ThisType;
 
 public:
-  using typename BaseType::EntityType;
-  using typename BaseType::DomainFieldType;
   using BaseType::dimDomain;
-  using typename BaseType::RangeFieldType;
   using BaseType::dimRange;
   using BaseType::dimRangeCols;
+  using typename BaseType::DomainFieldType;
+  using typename BaseType::EntityType;
   using typename BaseType::LocalfunctionType;
+  using typename BaseType::RangeFieldType;
 
 private:
   class ReinterpretLocalfunction
-      : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
+    : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
   {
     typedef LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
         BaseType;
 
   public:
     using typename BaseType::DomainType;
-    using typename BaseType::RangeType;
     using typename BaseType::JacobianRangeType;
+    using typename BaseType::RangeType;
 
     ReinterpretLocalfunction(const EntityType& entity, const size_t order, const ThisType& func)
       : BaseType(entity)
       , order_(order)
       , func_(func)
       , points_(1)
-    {
-    }
+    {}
 
     virtual size_t order(const Common::Parameter& /*mu*/ = {}) const override final
     {
@@ -146,8 +146,7 @@ public:
     , source_grid_layer_(source_grid_layer)
     , entity_search_(source_grid_layer_)
     , guessed_source_order_(source_.local_function(*source_grid_layer_.template begin<0>())->order())
-  {
-  }
+  {}
 
   virtual ~ReinterpretFunction() = default;
 

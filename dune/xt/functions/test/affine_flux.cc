@@ -19,7 +19,7 @@
 #include <dune/xt/grid/gridprovider/cube.hh>
 
 #if HAVE_DUNE_XT_LA
-#include <dune/xt/la/container/eye-matrix.hh>
+#  include <dune/xt/la/container/eye-matrix.hh>
 #endif // HAVE_DUNE_XT_LA
 
 #include <dune/xt/functions/affine.hh>

@@ -74,74 +74,69 @@ struct is_localizable_flux_function_helper
 
 
 template <class T, bool candidate = internal::is_localfunction_set_helper<T>::is_candidate>
-struct is_localfunction_set : public std::is_base_of<LocalfunctionSetInterface<typename T::EntityType,
-                                                                               typename T::DomainFieldType,
-                                                                               T::dimDomain,
-                                                                               typename T::RangeFieldType,
-                                                                               T::dimRange,
-                                                                               T::dimRangeCols>,
-                                                     T>
-{
-};
+struct is_localfunction_set
+  : public std::is_base_of<LocalfunctionSetInterface<typename T::EntityType,
+                                                     typename T::DomainFieldType,
+                                                     T::dimDomain,
+                                                     typename T::RangeFieldType,
+                                                     T::dimRange,
+                                                     T::dimRangeCols>,
+                           T>
+{};
 
 template <class T>
 struct is_localfunction_set<T, false> : public std::false_type
-{
-};
+{};
 
 
 template <class T, bool candidate = internal::is_localfunction_set_helper<T>::is_candidate>
-struct is_localfunction : public std::is_base_of<LocalfunctionInterface<typename T::EntityType,
-                                                                        typename T::DomainFieldType,
-                                                                        T::dimDomain,
-                                                                        typename T::RangeFieldType,
-                                                                        T::dimRange,
-                                                                        T::dimRangeCols>,
-                                                 T>
-{
-};
+struct is_localfunction
+  : public std::is_base_of<LocalfunctionInterface<typename T::EntityType,
+                                                  typename T::DomainFieldType,
+                                                  T::dimDomain,
+                                                  typename T::RangeFieldType,
+                                                  T::dimRange,
+                                                  T::dimRangeCols>,
+                           T>
+{};
 
 template <class T>
 struct is_localfunction<T, false> : public std::false_type
-{
-};
+{};
 
 
 template <class T, bool candidate = internal::is_localfunction_set_helper<T>::is_candidate>
-struct is_localizable_function : public std::is_base_of<LocalizableFunctionInterface<typename T::EntityType,
-                                                                                     typename T::DomainFieldType,
-                                                                                     T::dimDomain,
-                                                                                     typename T::RangeFieldType,
-                                                                                     T::dimRange,
-                                                                                     T::dimRangeCols>,
-                                                        T>
-{
-};
+struct is_localizable_function
+  : public std::is_base_of<LocalizableFunctionInterface<typename T::EntityType,
+                                                        typename T::DomainFieldType,
+                                                        T::dimDomain,
+                                                        typename T::RangeFieldType,
+                                                        T::dimRange,
+                                                        T::dimRangeCols>,
+                           T>
+{};
 
 template <class T>
 struct is_localizable_function<T, false> : public std::false_type
-{
-};
+{};
 
 
 template <class T, bool candidate = internal::is_localizable_flux_function_helper<T>::is_candidate>
 struct is_localizable_flux_function
-    : public std::is_base_of<LocalizableFluxFunctionInterface<typename T::EntityType,
-                                                              typename T::DomainFieldType,
-                                                              T::dimDomain,
-                                                              typename T::StateType,
-                                                              T::stateDerivativeOrder,
-                                                              typename T::RangeFieldType,
-                                                              T::dimRange,
-                                                              T::dimRangeCols>,
-                             T>
-{
-};
+  : public std::is_base_of<LocalizableFluxFunctionInterface<typename T::EntityType,
+                                                            typename T::DomainFieldType,
+                                                            T::dimDomain,
+                                                            typename T::StateType,
+                                                            T::stateDerivativeOrder,
+                                                            typename T::RangeFieldType,
+                                                            T::dimRange,
+                                                            T::dimRangeCols>,
+                           T>
+{};
 
 template <class T>
 struct is_localizable_flux_function<T, false> : public std::false_type
-{
-};
+{};
 
 
 //! Utility to generate a complete Function Type from an existing one and a template

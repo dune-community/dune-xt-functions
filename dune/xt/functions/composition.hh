@@ -45,7 +45,7 @@ struct GeneralLocalfunctionChooser
   static const size_t dimRangeCols = LocalizableFunctionInterfaceType::dimRangeCols;
 
   class Localfunction
-      : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
+    : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
   {
     typedef LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
         BaseType;
@@ -60,8 +60,7 @@ struct GeneralLocalfunctionChooser
       , outer_function_(outer_function)
       , entity_search_(entity_search)
       , entity_(entity)
-    {
-    }
+    {}
 
     Localfunction(const Localfunction& /*other*/) = delete;
 
@@ -121,7 +120,7 @@ struct LocalfunctionForGlobalChooser
   static const size_t dimRangeCols = LocalizableFunctionInterfaceType::dimRangeCols;
 
   class Localfunction
-      : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
+    : public LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
   {
     typedef LocalfunctionInterface<EntityType, DomainFieldType, dimDomain, RangeFieldType, dimRange, dimRangeCols>
         BaseType;
@@ -135,8 +134,7 @@ struct LocalfunctionForGlobalChooser
       , localizable_function_(localizable_function)
       , global_function_(global_function)
       , entity_(entity)
-    {
-    }
+    {}
 
     Localfunction(const Localfunction& /*other*/) = delete;
 
@@ -169,17 +167,17 @@ struct LocalfunctionForGlobalChooser
 template <class InnerType, class OuterType, class OuterGridViewType>
 struct LocalfunctionChooser
 {
-  typedef typename std::
-      conditional<std::is_base_of<Functions::GlobalFunctionInterface<typename OuterType::EntityType,
-                                                                     typename OuterType::DomainFieldType,
-                                                                     OuterType::dimDomain,
-                                                                     typename OuterType::RangeFieldType,
-                                                                     OuterType::dimRange,
-                                                                     OuterType::dimRangeCols>,
-                                  OuterType>::value,
-                  typename LocalfunctionForGlobalChooser<InnerType, OuterType, OuterGridViewType>::Localfunction,
-                  typename GeneralLocalfunctionChooser<InnerType, OuterType, OuterGridViewType>::Localfunction>::type
-          LocalfunctionType;
+  typedef typename std::conditional<
+      std::is_base_of<Functions::GlobalFunctionInterface<typename OuterType::EntityType,
+                                                         typename OuterType::DomainFieldType,
+                                                         OuterType::dimDomain,
+                                                         typename OuterType::RangeFieldType,
+                                                         OuterType::dimRange,
+                                                         OuterType::dimRangeCols>,
+                      OuterType>::value,
+      typename LocalfunctionForGlobalChooser<InnerType, OuterType, OuterGridViewType>::Localfunction,
+      typename GeneralLocalfunctionChooser<InnerType, OuterType, OuterGridViewType>::Localfunction>::type
+      LocalfunctionType;
 };
 
 
@@ -187,12 +185,13 @@ struct LocalfunctionChooser
 
 
 template <class InnerType, class OuterType, class OuterGridViewType = typename Dune::YaspGrid<1>::LeafGridView>
-class CompositionFunction : public LocalizableFunctionInterface<typename InnerType::EntityType,
-                                                                typename InnerType::DomainFieldType,
-                                                                InnerType::dimDomain,
-                                                                typename OuterType::RangeFieldType,
-                                                                OuterType::dimRange,
-                                                                OuterType::dimRangeCols>
+class CompositionFunction
+  : public LocalizableFunctionInterface<typename InnerType::EntityType,
+                                        typename InnerType::DomainFieldType,
+                                        InnerType::dimDomain,
+                                        typename OuterType::RangeFieldType,
+                                        OuterType::dimRange,
+                                        OuterType::dimRangeCols>
 {
   typedef LocalizableFunctionInterface<typename InnerType::EntityType,
                                        typename InnerType::DomainFieldType,
@@ -204,15 +203,15 @@ class CompositionFunction : public LocalizableFunctionInterface<typename InnerTy
   typedef CompositionFunction<InnerType, OuterType, OuterGridViewType> ThisType;
 
 public:
-  using typename BaseType::EntityType;
-  using typename BaseType::DomainFieldType;
-  using typename BaseType::RangeFieldType;
-  using typename BaseType::DomainType;
-  using typename BaseType::RangeType;
-  using typename BaseType::JacobianRangeType;
   using BaseType::dimDomain;
   using BaseType::dimRange;
   using BaseType::dimRangeCols;
+  using typename BaseType::DomainFieldType;
+  using typename BaseType::DomainType;
+  using typename BaseType::EntityType;
+  using typename BaseType::JacobianRangeType;
+  using typename BaseType::RangeFieldType;
+  using typename BaseType::RangeType;
 
 private:
   typedef
@@ -236,8 +235,7 @@ public:
     , outer_function_(outer_function)
     , entity_search_(std::make_shared<typename Grid::EntityInlevelSearch<OuterGridViewType>>(outer_grid_view))
     , name_(nm)
-  {
-  }
+  {}
 
   // constructor without grid view, only makes sense if OuterType is derived from GlobalFunctionInterface
   CompositionFunction(const InnerType local_func, const OuterType global_func, const std::string nm = static_id())

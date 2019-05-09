@@ -65,8 +65,7 @@ public:
 
   LocalFluxFunctionInterface(const EntityType& en)
     : entity_(en)
-  {
-  }
+  {}
 
   virtual ~LocalFluxFunctionInterface() = default;
 
@@ -215,8 +214,7 @@ public:
 
   LocalFluxFunctionInterface(const EntityType& en)
     : entity_(en)
-  {
-  }
+  {}
 
   virtual ~LocalFluxFunctionInterface() = default;
 

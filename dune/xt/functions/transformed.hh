@@ -47,13 +47,13 @@ auto u_primitive = XT::Functions::make_transformed_function<d + 2, 1, R>(u_conse
  */
 template <class LF, size_t r = LF::r, size_t rC = LF::rC, class R = typename LF::R>
 class TransformedLocalizableFunction
-    : public XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>
+  : public XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>
 {
   static_assert(is_localizable_function<LF>::value, "");
   using BaseType = XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>;
 
   class TransformedLocalFunction
-      : public XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>
+    : public XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>
   {
     using BaseType = XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, R, r, rC>;
     using UntransformedLocalFunctionType = typename LF::LocalfunctionType;
@@ -61,17 +61,16 @@ class TransformedLocalizableFunction
   public:
     using UntransformedRangeType = typename UntransformedLocalFunctionType::RangeType;
     using typename BaseType::DomainType;
-    using typename BaseType::RangeType;
-    using typename BaseType::JacobianRangeType;
     using typename BaseType::EntityType;
+    using typename BaseType::JacobianRangeType;
+    using typename BaseType::RangeType;
     using Transformation = std::function<RangeType(const UntransformedRangeType&)>;
 
     TransformedLocalFunction(const EntityType& en, const LF& function, const Transformation& transformation)
       : BaseType(en)
       , local_function_(function.local_function(en))
       , transformation_(transformation)
-    {
-    }
+    {}
 
     size_t order(const XT::Common::Parameter& mu = {}) const override final
     {
@@ -109,8 +108,7 @@ public:
     : function_(f)
     , transformation_(transformation)
     , name_(nm)
-  {
-  }
+  {}
 
   std::string name() const override final
   {

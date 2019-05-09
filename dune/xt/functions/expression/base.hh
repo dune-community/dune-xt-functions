@@ -28,7 +28,7 @@
 #include "mathexpr.hh"
 
 #ifndef DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE
-#define DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE 64
+#  define DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE 64
 #endif
 
 
@@ -182,9 +182,7 @@ private:
     if (_expression.size() < dimRange)
       DUNE_THROW(Dune::InvalidStateException,
                  "\n" << Common::color_string_red("ERROR:") << " '_expression' too short (is " << _expression.size()
-                      << ", should be "
-                      << dimRange
-                      << ")!");
+                      << ", should be " << dimRange << ")!");
     for (size_t ii = 0; ii < dimRange; ++ii)
       expressions_.push_back(_expression[ii]);
     // set variable (i.e. "x")
@@ -289,8 +287,7 @@ public:
     if (arg.size() != original_variables_.size())
       DUNE_THROW(Common::Exceptions::shapes_do_not_match,
                  "arg.size(): " << arg.size() << "\n   "
-                                << "variables.size(): "
-                                << original_variables_.size());
+                                << "variables.size(): " << original_variables_.size());
     // copy arg
     for (size_t ii = 0; ii < original_variables_.size(); ++ii)
       *(arg_[ii]) = arg[ii];
@@ -308,8 +305,7 @@ private:
     if (exprs.size() != dimRange)
       DUNE_THROW(Common::Exceptions::shapes_do_not_match,
                  "expressions.size(): " << exprs.size() << "\n   "
-                                        << "dimRange: "
-                                        << dimRange);
+                                        << "dimRange: " << dimRange);
     expressions_ = exprs;
     for (const auto& ex : expressions_)
       if (ex.empty())
@@ -318,9 +314,7 @@ private:
       DUNE_THROW(
           Common::Exceptions::shapes_do_not_match,
           "This expression function of dynamic size was compiled to work for up to "
-              << DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE
-              << " variables, but you provided "
-              << vars.size()
+              << DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE << " variables, but you provided " << vars.size()
               << "!\n\n"
               << "Configure dune-xt-functions with a larger DUNE_XT_FUNCTIONS_EXPRESSION_BASE_MAX_DYNAMIC_SIZE!");
     original_variables_ = vars;

@@ -12,7 +12,7 @@
 
 #if HAVE_DUNE_ALUGRID
 
-#include "../expression.lib.hh"
+#  include "../expression.lib.hh"
 
 
 DUNE_XT_FUNCTIONS_EXPRESSION_LIB_ALU_2D(template);

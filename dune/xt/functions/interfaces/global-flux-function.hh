@@ -35,14 +35,15 @@ template <class EntityImp,
           class RangeFieldImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
-class GlobalFluxFunctionInterface : public LocalizableFluxFunctionInterface<EntityImp,
-                                                                            DomainFieldImp,
-                                                                            domainDim,
-                                                                            U_,
-                                                                            state_derivative_order,
-                                                                            RangeFieldImp,
-                                                                            rangeDim,
-                                                                            rangeDimCols>
+class GlobalFluxFunctionInterface
+  : public LocalizableFluxFunctionInterface<EntityImp,
+                                            DomainFieldImp,
+                                            domainDim,
+                                            U_,
+                                            state_derivative_order,
+                                            RangeFieldImp,
+                                            rangeDim,
+                                            rangeDimCols>
 {
   typedef LocalizableFluxFunctionInterface<EntityImp,
                                            DomainFieldImp,
@@ -75,9 +76,7 @@ public:
   typedef typename LocalfunctionType::ColPartialXRangeType ColPartialXRangeType;
   typedef typename LocalfunctionType::ColPartialURangeType ColPartialURangeType;
 
-  virtual ~GlobalFluxFunctionInterface()
-  {
-  }
+  virtual ~GlobalFluxFunctionInterface() {}
 
   virtual size_t order(const Common::Parameter& /*mu*/ = {}) const = 0;
 
@@ -203,12 +202,9 @@ private:
       : LocalfunctionType(entity_in)
       , geometry_(entity_in.geometry())
       , global_function_(global_function)
-    {
-    }
+    {}
 
-    virtual ~Localfunction()
-    {
-    }
+    virtual ~Localfunction() {}
 
     virtual size_t order(const Common::Parameter& mu) const override final
     {
@@ -285,14 +281,14 @@ public:
 
 template <class OtherEntityImp, class GlobalFluxFunctionImp>
 class TransferredGlobalFluxFunction
-    : public GlobalFluxFunctionInterface<OtherEntityImp,
-                                         typename GlobalFluxFunctionImp::DomainFieldType,
-                                         GlobalFluxFunctionImp::dimDomain,
-                                         typename GlobalFluxFunctionImp::StateType,
-                                         GlobalFluxFunctionImp::state_derivative_order,
-                                         typename GlobalFluxFunctionImp::RangeFieldType,
-                                         GlobalFluxFunctionImp::dimRange,
-                                         GlobalFluxFunctionImp::dimRangeCols>
+  : public GlobalFluxFunctionInterface<OtherEntityImp,
+                                       typename GlobalFluxFunctionImp::DomainFieldType,
+                                       GlobalFluxFunctionImp::dimDomain,
+                                       typename GlobalFluxFunctionImp::StateType,
+                                       GlobalFluxFunctionImp::state_derivative_order,
+                                       typename GlobalFluxFunctionImp::RangeFieldType,
+                                       GlobalFluxFunctionImp::dimRange,
+                                       GlobalFluxFunctionImp::dimRangeCols>
 {
   typedef GlobalFluxFunctionInterface<OtherEntityImp,
                                       typename GlobalFluxFunctionImp::DomainFieldType,
@@ -307,8 +303,7 @@ class TransferredGlobalFluxFunction
 public:
   TransferredGlobalFluxFunction(const GlobalFluxFunctionImp& function)
     : function_(function)
-  {
-  }
+  {}
 
   virtual size_t order(const XT::Common::Parameter& mu = {}) const
   {

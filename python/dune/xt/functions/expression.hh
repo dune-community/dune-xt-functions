@@ -32,8 +32,7 @@ struct addbind_ExpressionFunction_scalar_ctor
 {
   template <class C>
   void operator()(C& /*c*/, const std::string& /*static_id*/)
-  {
-  }
+  {}
 };
 
 template <size_t r>
@@ -72,14 +71,12 @@ static const constexpr size_t d = G::dimension;
  *       everywhere: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=59937
  */
 template <class G, size_t d, size_t r, size_t rC>
-typename std::enable_if<Grid::is_grid<G>::value,
-                        pybind11::class_<ExpressionFunction<typename G::template Codim<0>::Entity,
-                                                            typename G::ctype,
-                                                            G::dimension,
-                                                            double,
-                                                            r,
-                                                            rC>>>::type
-bind_ExpressionFunction(pybind11::module& m, const std::string& grid_id)
+typename std::enable_if<
+    Grid::is_grid<G>::value,
+    pybind11::class_<
+        ExpressionFunction<typename G::template Codim<0>::Entity, typename G::ctype, G::dimension, double, r, rC>>>::
+    type
+    bind_ExpressionFunction(pybind11::module& m, const std::string& grid_id)
 {
   namespace py = pybind11;
   using namespace pybind11::literals;
@@ -160,17 +157,17 @@ bind_ExpressionFunction(pybind11::module& m, const std::string& grid_id)
 
   internal::addbind_ExpressionFunction_scalar_ctor<r, rC>()(c, C::static_id());
   c.def(
-          py::init<const std::string, const std::string, const size_t, const std::string, const std::vector<std::string>>(),
-          "variable"_a,
-          "expression"_a,
-          "order"_a,
-          "name"_a = C::static_id(),
-          "gradient_expressions"_a = std::vector<std::string>());
+      py::init<const std::string, const std::string, const size_t, const std::string, const std::vector<std::string>>(),
+      "variable"_a,
+      "expression"_a,
+      "order"_a,
+      "name"_a = C::static_id(),
+      "gradient_expressions"_a = std::vector<std::string>());
   c.def(py::init<const std::string,
-                const std::vector<std::vector<std::string>>,
-                const size_t,
-                const std::string,
-                const std::vector<std::vector<std::vector<std::string>>>>(),
+                 const std::vector<std::vector<std::string>>,
+                 const size_t,
+                 const std::string,
+                 const std::vector<std::vector<std::vector<std::string>>>>(),
         "variable"_a,
         "expressions"_a,
         "order"_a,

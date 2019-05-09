@@ -191,17 +191,11 @@ public:
     else if (available().empty())
       DUNE_THROW(Common::Exceptions::wrong_input_given,
                  "There is no " << InterfaceType::static_id() << " available for dimensions " << size_t(d) << " -> "
-                                << size_t(r)
-                                << " x "
-                                << size_t(rC)
-                                << "!");
+                                << size_t(r) << " x " << size_t(rC) << "!");
     else
       DUNE_THROW(Common::Exceptions::wrong_input_given,
                  "Requested type '" << type << "' is not one of those avaible for dimensions " << size_t(d) << " -> "
-                                    << size_t(r)
-                                    << " x "
-                                    << size_t(rC)
-                                    << ":\n"
+                                    << size_t(r) << " x " << size_t(rC) << ":\n"
                                     << available_as_str());
   } // ... default_config(...)
 
@@ -227,17 +221,11 @@ public:
     else if (available().empty())
       DUNE_THROW(Common::Exceptions::wrong_input_given,
                  "There is no " << InterfaceType::static_id() << " available for dimensions " << size_t(d) << " -> "
-                                << size_t(r)
-                                << " x "
-                                << size_t(rC)
-                                << "!");
+                                << size_t(r) << " x " << size_t(rC) << "!");
     else
       DUNE_THROW(Common::Exceptions::wrong_input_given,
                  "Requested type '" << type << "' is not one of those avaible for dimensions " << size_t(d) << " -> "
-                                    << size_t(r)
-                                    << " x "
-                                    << size_t(rC)
-                                    << ":\n"
+                                    << size_t(r) << " x " << size_t(rC) << ":\n"
                                     << available_as_str());
   } // ... create(...)
 
@@ -249,7 +237,7 @@ public:
   }
 }; // class FunctionsProvider
 
-} // namespace Functions {
+} // namespace Functions
 } // namespace XT
 } // namespace Dune
 

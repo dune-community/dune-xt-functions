@@ -267,12 +267,13 @@ public:
  * \note Most likely you do not want to use this class directly, but Combined.
  */
 template <class LeftType, class RightType, Combination type>
-class CombinedLocalFunction : public LocalfunctionInterface<typename SelectCombined<LeftType, RightType, type>::E,
-                                                            typename SelectCombined<LeftType, RightType, type>::D,
-                                                            SelectCombined<LeftType, RightType, type>::d,
-                                                            typename SelectCombined<LeftType, RightType, type>::R,
-                                                            SelectCombined<LeftType, RightType, type>::r,
-                                                            SelectCombined<LeftType, RightType, type>::rC>
+class CombinedLocalFunction
+  : public LocalfunctionInterface<typename SelectCombined<LeftType, RightType, type>::E,
+                                  typename SelectCombined<LeftType, RightType, type>::D,
+                                  SelectCombined<LeftType, RightType, type>::d,
+                                  typename SelectCombined<LeftType, RightType, type>::R,
+                                  SelectCombined<LeftType, RightType, type>::r,
+                                  SelectCombined<LeftType, RightType, type>::rC>
 {
   typedef LocalfunctionInterface<typename SelectCombined<LeftType, RightType, type>::E,
                                  typename SelectCombined<LeftType, RightType, type>::D,
@@ -296,8 +297,7 @@ public:
     , right_local_(right.local_function(this->entity()))
     , tmp_range_(0.0)
     , tmp_jacobian_(0.0)
-  {
-  }
+  {}
 
   virtual size_t order(const XT::Common::Parameter& mu = {}) const override final
   {
@@ -367,12 +367,13 @@ Difference< ConstantType, ConstantType > stupid_difference()
  * \note  Most likely you do not want to use this class diretly, but one of Difference, Sum or Product.
  */
 template <class LeftType, class RightType, Combination comb>
-class Combined : public LocalizableFunctionInterface<typename SelectCombined<LeftType, RightType, comb>::E,
-                                                     typename SelectCombined<LeftType, RightType, comb>::D,
-                                                     SelectCombined<LeftType, RightType, comb>::d,
-                                                     typename SelectCombined<LeftType, RightType, comb>::R,
-                                                     SelectCombined<LeftType, RightType, comb>::r,
-                                                     SelectCombined<LeftType, RightType, comb>::rC>
+class Combined
+  : public LocalizableFunctionInterface<typename SelectCombined<LeftType, RightType, comb>::E,
+                                        typename SelectCombined<LeftType, RightType, comb>::D,
+                                        SelectCombined<LeftType, RightType, comb>::d,
+                                        typename SelectCombined<LeftType, RightType, comb>::R,
+                                        SelectCombined<LeftType, RightType, comb>::r,
+                                        SelectCombined<LeftType, RightType, comb>::rC>
 {
   typedef LocalizableFunctionInterface<typename SelectCombined<LeftType, RightType, comb>::E,
                                        typename SelectCombined<LeftType, RightType, comb>::D,
@@ -392,25 +393,20 @@ public:
   Combined(const LeftType& left, const RightType& right, const std::string nm = "")
     : left_(Common::make_unique<LeftStorageType>(left))
     , right_(Common::make_unique<RightStorageType>(right))
-    , name_(nm.empty()
-                ? SelectCombined<LeftType, RightType, comb>::type() + " of '" + left.name() + "' and '" + right.name()
-                      + "'"
-                : nm)
-  {
-  }
+    , name_(nm.empty() ? SelectCombined<LeftType, RightType, comb>::type() + " of '" + left.name() + "' and '"
+                             + right.name() + "'"
+                       : nm)
+  {}
 
   Combined(const std::shared_ptr<const LeftType> left,
            const std::shared_ptr<const RightType> right,
            const std::string nm = "")
     : left_(Common::make_unique<LeftStorageType>(left))
     , right_(Common::make_unique<RightStorageType>(right))
-    , name_(nm.empty()
-                ? SelectCombined<LeftType, RightType, comb>::type() + " of '" + left_->access().name() + "' and '"
-                      + right_->access().name()
-                      + "'"
-                : nm)
-  {
-  }
+    , name_(nm.empty() ? SelectCombined<LeftType, RightType, comb>::type() + " of '" + left_->access().name()
+                             + "' and '" + right_->access().name() + "'"
+                       : nm)
+  {}
 
   Combined(ThisType&& source) = default;
 
@@ -466,8 +462,7 @@ public:
   template <class... Args>
   DifferenceFunction(Args&&... args)
     : BaseType(std::forward<Args>(args)...)
-  {
-  }
+  {}
 }; // class DifferenceFunction
 
 /**
@@ -484,8 +479,7 @@ public:
   template <class... Args>
   SumFunction(Args&&... args)
     : BaseType(std::forward<Args>(args)...)
-  {
-  }
+  {}
 }; // class SumFunction
 
 /**
@@ -502,8 +496,7 @@ public:
   template <class... Args>
   ProductFunction(Args&&... args)
     : BaseType(std::forward<Args>(args)...)
-  {
-  }
+  {}
 }; // class ProductFunction
 
 template <class T1, class T2, class... Args>

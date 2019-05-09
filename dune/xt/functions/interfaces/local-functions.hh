@@ -156,8 +156,7 @@ public:
 
   LocalfunctionSetInterface(const EntityType& ent)
     : entity_(ent)
-  {
-  }
+  {}
 
   virtual ~LocalfunctionSetInterface() = default;
 
@@ -244,7 +243,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class LocalfunctionInterface
-    : public LocalfunctionSetInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public LocalfunctionSetInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef LocalfunctionSetInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
       BaseType;
@@ -260,12 +259,9 @@ public:
 
   LocalfunctionInterface(const EntityType& ent)
     : BaseType(ent)
-  {
-  }
+  {}
 
-  virtual ~LocalfunctionInterface()
-  {
-  }
+  virtual ~LocalfunctionInterface() {}
 
   /**
    * \name ´´These methods have to be implemented in addition to the ones required from the BaseType.''

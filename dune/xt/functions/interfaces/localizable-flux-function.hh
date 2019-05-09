@@ -87,8 +87,8 @@ public:
     return "fluxfunction";
   }
   /**
-    * \}
-    */
+   * \}
+   */
 }; // class LocalizableFluxFunctionInterface
 
 

@@ -47,9 +47,8 @@ public:
 
 template <class DimDomain>
 class DifferenceFunctionTest
-    : public FunctionTest<
-          typename DifferenceFunctionType<YaspGrid<DimDomain::value,
-                                                   EquidistantOffsetCoordinates<double, DimDomain::value>>>::value>
+  : public FunctionTest<typename DifferenceFunctionType<
+        YaspGrid<DimDomain::value, EquidistantOffsetCoordinates<double, DimDomain::value>>>::value>
 {
 protected:
   typedef YaspGrid<DimDomain::value, EquidistantOffsetCoordinates<double, DimDomain::value>> GridType;
@@ -62,9 +61,9 @@ protected:
 
   static std::unique_ptr<FunctionType> create(const double ll, const double rr)
   {
-    typedef typename DifferenceFunctionType<YaspGrid<DimDomain::value,
-                                                     EquidistantOffsetCoordinates<double, DimDomain::value>>>::
-        ConstantFunctionType ConstantFunctionType;
+    typedef typename DifferenceFunctionType<
+        YaspGrid<DimDomain::value, EquidistantOffsetCoordinates<double, DimDomain::value>>>::ConstantFunctionType
+        ConstantFunctionType;
     auto left = std::make_shared<ConstantFunctionType>(ll);
     auto right = std::make_shared<ConstantFunctionType>(rr);
     return std::unique_ptr<FunctionType>(new FunctionType(left, right));

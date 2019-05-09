@@ -35,7 +35,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class GlobalLambdaFunction
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols> BaseType;
 
@@ -65,8 +65,7 @@ public:
     , param_type_(param_type)
     , name_(nm)
     , jacobian_lambda_(jacobian_lambda)
-  {
-  }
+  {}
 
   GlobalLambdaFunction(LambdaType lambda,
                        OrderLambdaType order_lambda,
@@ -83,8 +82,7 @@ public:
     , param_type_(param_type)
     , name_(nm)
     , jacobian_lambda_(jacobian_lambda)
-  {
-  }
+  {}
 
   virtual size_t order(const Common::Parameter& mu = {}) const override final
   {

@@ -15,16 +15,16 @@
 
 #if HAVE_DUNE_XT_LA
 
-#include <memory>
+#  include <memory>
 
-#include <dune/xt/common/configuration.hh>
-#include <dune/xt/common/fmatrix.hh>
+#  include <dune/xt/common/configuration.hh>
+#  include <dune/xt/common/fmatrix.hh>
 
-#include <dune/xt/functions/constant.hh>
+#  include <dune/xt/functions/constant.hh>
 
-#include <dune/xt/la/container/common.hh>
+#  include <dune/xt/la/container/common.hh>
 
-#include <dune/xt/functions/interfaces.hh>
+#  include <dune/xt/functions/interfaces.hh>
 
 namespace Dune {
 namespace XT {
@@ -237,8 +237,8 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class AffineFunction
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>,
-      public internal::AffineFunctionBase<DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  , public internal::AffineFunctionBase<DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
       InterfaceType;
@@ -253,8 +253,8 @@ public:
   using InterfaceType::dimDomain;
   using InterfaceType::dimRange;
   using InterfaceType::dimRangeCols;
-  using typename BaseType::MatrixType;
   using typename BaseType::FieldMatrixType;
+  using typename BaseType::MatrixType;
 
   using BaseType::default_config;
 
@@ -291,32 +291,28 @@ public:
                           const RangeType& b = RangeType(0),
                           const std::string name_in = static_id())
     : BaseType(A, b, name_in)
-  {
-  }
+  {}
 
   explicit AffineFunction(const FieldVector<FieldMatrixType, dimRangeCols>& A,
                           const RangeType& b = RangeType(0),
                           const bool prune = true,
                           const std::string name_in = static_id())
     : BaseType(A, b, prune, name_in)
-  {
-  }
+  {}
 
   explicit AffineFunction(const std::vector<FieldMatrixType>& A,
                           const RangeType& b = RangeType(0),
                           const bool prune = true,
                           const std::string name_in = static_id())
     : BaseType(A, b, prune, name_in)
-  {
-  }
+  {}
 
   // constructor for dimRangeCols = 1.
   explicit AffineFunction(const MatrixType& A,
                           const RangeType& b = RangeType(0),
                           const std::string name_in = static_id())
     : BaseType(A, b, name_in)
-  {
-  }
+  {}
 
   using InterfaceType::evaluate;
 
@@ -352,16 +348,16 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class AffineFluxFunction
-    : public GlobalFluxFunctionInterface<EntityImp,
-                                         DomainFieldImp,
-                                         domainDim,
-                                         U_,
-                                         0,
-                                         RangeFieldImp,
-                                         rangeDim,
-                                         rangeDimCols>,
-      public internal::
-          AffineFunctionBase<typename U_::RangeFieldType, U_::dimRange, RangeFieldImp, rangeDim, rangeDimCols>
+  : public GlobalFluxFunctionInterface<EntityImp,
+                                       DomainFieldImp,
+                                       domainDim,
+                                       U_,
+                                       0,
+                                       RangeFieldImp,
+                                       rangeDim,
+                                       rangeDimCols>
+  , public internal::
+        AffineFunctionBase<typename U_::RangeFieldType, U_::dimRange, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef GlobalFluxFunctionInterface<EntityImp,
                                       DomainFieldImp,
@@ -427,8 +423,7 @@ public:
                               const RangeType& b = RangeType(0),
                               const std::string name_in = static_id())
     : BaseType(A, b, name_in)
-  {
-  }
+  {}
 
   template <class MatrixImp>
   explicit AffineFluxFunction(const Dune::FieldVector<MatrixImp, dimRangeCols>& A,
@@ -436,32 +431,28 @@ public:
                               const bool prune = true,
                               const std::string name_in = static_id())
     : BaseType(A, b, prune, name_in)
-  {
-  }
+  {}
 
   explicit AffineFluxFunction(const std::vector<FieldMatrixType>& A,
                               const RangeType& b = RangeType(0),
                               const bool prune = true,
                               const std::string name_in = static_id())
     : BaseType(A, b, prune, name_in)
-  {
-  }
+  {}
 
   // constructor for dimRangeCols = 1.
   explicit AffineFluxFunction(const MatrixType& A,
                               const RangeType& b = RangeType(0),
                               const std::string name_in = static_id())
     : BaseType(A, b, name_in)
-  {
-  }
+  {}
 
   explicit AffineFluxFunction(const DynamicMatrix<RangeFieldType>& A,
                               const RangeType& b = RangeType(0),
                               const bool prune = true,
                               const std::string name_in = static_id())
     : BaseType(A, b, prune, name_in)
-  {
-  }
+  {}
 
   using InterfaceType::evaluate;
 

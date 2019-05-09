@@ -43,7 +43,7 @@ auto energy = XT::Functions::make_sliced_function<1>(u, {3}, "energy");
  */
 template <class LF, size_t r>
 class SlicedLocalizableFunction<LF, r, 1>
-    : public XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>
+  : public XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>
 {
   static_assert(is_localizable_function<LF>::value, "");
   static_assert(r <= LF::r, "Does not make sense!");
@@ -51,22 +51,21 @@ class SlicedLocalizableFunction<LF, r, 1>
       XT::Functions::LocalizableFunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>;
 
   class SlicedLocalFunction
-      : public XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>
+    : public XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>
   {
     using BaseType = XT::Functions::LocalfunctionInterface<typename LF::E, typename LF::D, LF::d, typename LF::R, r, 1>;
 
   public:
-    using typename BaseType::EntityType;
     using typename BaseType::DomainType;
-    using typename BaseType::RangeType;
+    using typename BaseType::EntityType;
     using typename BaseType::JacobianRangeType;
+    using typename BaseType::RangeType;
 
     SlicedLocalFunction(const LF& function, const std::array<size_t, r>& dims, const EntityType& ent)
       : BaseType(ent)
       , local_function_(function.local_function(ent))
       , dims_(dims)
-    {
-    }
+    {}
 
     size_t order(const XT::Common::Parameter& = {}) const override final
     {
@@ -105,13 +104,8 @@ public:
       if (dims_[ii] >= LF::r)
         DUNE_THROW(InvalidStateException,
                    "LF::r = " << LF::r << "\n   "
-                              << "r = "
-                              << r
-                              << "\n   "
-                              << "dims["
-                              << ii
-                              << "] = "
-                              << dims_[ii]);
+                              << "r = " << r << "\n   "
+                              << "dims[" << ii << "] = " << dims_[ii]);
   }
 
   std::string name() const override final

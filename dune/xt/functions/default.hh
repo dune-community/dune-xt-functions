@@ -43,8 +43,7 @@ public:
     : function_(function)
     , tmp_value_(0)
     , name_(nm)
-  {
-  }
+  {}
 
 private:
   template <size_t r, size_t rC, bool anything = true>

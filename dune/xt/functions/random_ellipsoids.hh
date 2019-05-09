@@ -61,7 +61,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class RandomEllipsoidsFunction
-    : public LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
 protected:
   typedef LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
@@ -80,7 +80,7 @@ public:
   typedef typename BaseType::RangeType RangeType;
   typedef Ellipsoid<dimDomain, DomainFieldType> EllipsoidType;
   class Localfunction
-      : public LocalfunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+    : public LocalfunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
   {
     typedef LocalfunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
         BaseType;

@@ -48,16 +48,15 @@ class IndicatorFunction<E, D, d, R, 1> : public LocalizableFunctionInterface<E, 
     typedef LocalfunctionInterface<E, D, d, R, 1> InterfaceType;
 
   public:
-    using typename InterfaceType::EntityType;
     using typename InterfaceType::DomainType;
-    using typename InterfaceType::RangeType;
+    using typename InterfaceType::EntityType;
     using typename InterfaceType::JacobianRangeType;
+    using typename InterfaceType::RangeType;
 
     Localfunction(const EntityType& entity, const RangeType& value)
       : InterfaceType(entity)
       , value_(value)
-    {
-    }
+    {}
 
     virtual size_t order(const Common::Parameter& /*mu*/ = {}) const override final
     {
@@ -83,12 +82,12 @@ class IndicatorFunction<E, D, d, R, 1> : public LocalizableFunctionInterface<E, 
   }; // class Localfunction
 
 public:
-  using typename BaseType::EntityType;
   using typename BaseType::DomainFieldType;
   using typename BaseType::DomainType;
-  using typename BaseType::RangeType;
-  using typename BaseType::RangeFieldType;
+  using typename BaseType::EntityType;
   using typename BaseType::LocalfunctionType;
+  using typename BaseType::RangeFieldType;
+  using typename BaseType::RangeType;
 
   static const bool available = true;
 
@@ -149,20 +148,16 @@ public:
                     const std::string name_in = "indicator")
     : values_(values)
     , name_(name_in)
-  {
-  }
+  {}
 
   IndicatorFunction(
       const std::vector<std::pair<std::pair<Common::FieldVector<D, d>, Common::FieldVector<D, d>>, R>>& values,
       const std::string name_in = "indicator")
     : values_(convert(values))
     , name_(name_in)
-  {
-  }
+  {}
 
-  virtual ~IndicatorFunction()
-  {
-  }
+  virtual ~IndicatorFunction() {}
 
   virtual std::string name() const override final
   {

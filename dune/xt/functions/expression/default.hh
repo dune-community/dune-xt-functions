@@ -38,7 +38,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class ExpressionFunction
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols> BaseType;
   typedef ExpressionFunction<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols> ThisType;
@@ -47,14 +47,14 @@ class ExpressionFunction
   typedef MathExpressionBase<DomainFieldImp, domainDim, RangeFieldImp, domainDim> MathExpressionGradientType;
 
 public:
-  using typename BaseType::EntityType;
-  using typename BaseType::DomainType;
-  using typename BaseType::RangeFieldType;
   using BaseType::dimDomain;
   using BaseType::dimRange;
   using BaseType::dimRangeCols;
-  using typename BaseType::RangeType;
+  using typename BaseType::DomainType;
+  using typename BaseType::EntityType;
   using typename BaseType::JacobianRangeType;
+  using typename BaseType::RangeFieldType;
+  using typename BaseType::RangeType;
   typedef typename std::vector<std::vector<std::string>> ExpressionStringVectorType;
   typedef typename std::vector<std::vector<std::vector<std::string>>> GradientStringVectorType;
 
@@ -289,7 +289,7 @@ public:
   {
     eval_helper<>::evaluate(function_, tmp_vector_, xx, ret);
 #ifndef NDEBUG
-#ifndef DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
+#  ifndef DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
     bool failure = false;
     std::string error_type;
     for (size_t rr = 0; rr < dimRange; ++rr) {
@@ -308,24 +308,16 @@ public:
         if (failure)
           DUNE_THROW(Common::Exceptions::internal_error,
                      "evaluating this function yielded "
-                         << error_type
-                         << "!\n"
-                         << "The variable of this function is:     "
-                         << function_->variable()
+                         << error_type << "!\n"
+                         << "The variable of this function is:     " << function_->variable() << "\n"
+                         << "The expression of this function is: " << function_->expression().at(rr * dimRangeCols + cc)
                          << "\n"
-                         << "The expression of this function is: "
-                         << function_->expression().at(rr * dimRangeCols + cc)
-                         << "\n"
-                         << "You tried to evaluate it with:   xx = "
-                         << xx
-                         << "\n"
-                         << "The result was:                       "
-                         << tmp_row_->operator[](cc)
-                         << "\n\n"
+                         << "You tried to evaluate it with:   xx = " << xx << "\n"
+                         << "The result was:                       " << tmp_row_->operator[](cc) << "\n\n"
                          << "You can disable this check by defining DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS\n");
       }
     }
-#endif // DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
+#  endif // DUNE_XT_FUNCTIONS_EXPRESSION_DISABLE_CHECKS
 #endif // NDEBUG
   } // ... evaluate(...)
 

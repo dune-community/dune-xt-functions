@@ -34,7 +34,7 @@ template <class EntityImp,
           size_t rangeDim,
           size_t rangeDimCols = 1>
 class GlobalFunctionInterface
-    : public LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
+  : public LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
 {
   typedef LocalizableFunctionInterface<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
       BaseType;
@@ -46,9 +46,7 @@ public:
   typedef typename BaseType::RangeType RangeType;
   typedef typename BaseType::JacobianRangeType JacobianRangeType;
 
-  virtual ~GlobalFunctionInterface()
-  {
-  }
+  virtual ~GlobalFunctionInterface() {}
 
   virtual size_t order(const XT::Common::Parameter& /*mu*/ = {}) const = 0;
 
@@ -96,12 +94,9 @@ private:
       : LocalfunctionType(entity_in)
       , geometry_(entity_in.geometry())
       , global_function_(global_function)
-    {
-    }
+    {}
 
-    virtual ~Localfunction()
-    {
-    }
+    virtual ~Localfunction() {}
 
     virtual void evaluate(const DomainType& xx, RangeType& ret, const Common::Parameter& mu = {}) const override final
     {
@@ -142,12 +137,13 @@ public:
 
 
 template <class OtherEntityImp, class GlobalFunctionImp>
-class TransferredGlobalFunction : public GlobalFunctionInterface<OtherEntityImp,
-                                                                 typename GlobalFunctionImp::DomainFieldType,
-                                                                 GlobalFunctionImp::dimDomain,
-                                                                 typename GlobalFunctionImp::RangeFieldType,
-                                                                 GlobalFunctionImp::dimRange,
-                                                                 GlobalFunctionImp::dimRangeCols>
+class TransferredGlobalFunction
+  : public GlobalFunctionInterface<OtherEntityImp,
+                                   typename GlobalFunctionImp::DomainFieldType,
+                                   GlobalFunctionImp::dimDomain,
+                                   typename GlobalFunctionImp::RangeFieldType,
+                                   GlobalFunctionImp::dimRange,
+                                   GlobalFunctionImp::dimRangeCols>
 {
   typedef GlobalFunctionInterface<OtherEntityImp,
                                   typename GlobalFunctionImp::DomainFieldType,
@@ -160,8 +156,7 @@ class TransferredGlobalFunction : public GlobalFunctionInterface<OtherEntityImp,
 public:
   TransferredGlobalFunction(const GlobalFunctionImp& function)
     : function_(function)
-  {
-  }
+  {}
 
   virtual size_t order(const XT::Common::Parameter& mu = {}) const
   {

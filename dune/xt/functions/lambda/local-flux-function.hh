@@ -63,33 +63,33 @@ FluxType F([](const typename F::EntityType& entity,
  */
 template <class U, class R, size_t r, size_t rC>
 class LocalLambdaFluxFunction<U, 0, R, r, rC>
-    : public LocalizableFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC>
+  : public LocalizableFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC>
 {
   typedef LocalizableFluxFunctionInterface<typename U::E, typename U::D, U::d, U, 0, R, r, rC> BaseType;
 
 public:
-  using typename BaseType::EntityType;
-  using typename BaseType::E;
-  using typename BaseType::D;
   using BaseType::d;
-  using typename BaseType::LocalfunctionType;
   using BaseType::dimRangeCols;
+  using typename BaseType::D;
+  using typename BaseType::E;
+  using typename BaseType::EntityType;
+  using typename BaseType::LocalfunctionType;
 
 private:
   class LocalLambdaFluxLocalFunction
-      : public LocalFluxFunctionInterface<E, D, d, typename U::LocalfunctionType, 0, R, r, rC>
+    : public LocalFluxFunctionInterface<E, D, d, typename U::LocalfunctionType, 0, R, r, rC>
   {
     typedef LocalFluxFunctionInterface<E, D, d, typename U::LocalfunctionType, 0, R, r, rC> BaseType;
 
   public:
-    using typename BaseType::EntityType;
+    using typename BaseType::ColPartialURangeType;
+    using typename BaseType::ColPartialXRangeType;
     using typename BaseType::DomainType;
-    using typename BaseType::StateRangeType;
-    using typename BaseType::RangeType;
+    using typename BaseType::EntityType;
     using typename BaseType::PartialURangeType;
     using typename BaseType::PartialXRangeType;
-    using typename BaseType::ColPartialXRangeType;
-    using typename BaseType::ColPartialURangeType;
+    using typename BaseType::RangeType;
+    using typename BaseType::StateRangeType;
 
     typedef std::function<RangeType(
         const EntityType&, const DomainType&, const StateRangeType&, const Common::Parameter&)>
@@ -125,8 +125,7 @@ private:
       , partial_u_lambda_(partial_u_lambda)
       , partial_x_col_lambdas_(partial_x_col_lambdas)
       , partial_u_col_lambdas_(partial_u_col_lambdas)
-    {
-    }
+    {}
 
     virtual size_t order(const XT::Common::Parameter& mu = {}) const override
     {

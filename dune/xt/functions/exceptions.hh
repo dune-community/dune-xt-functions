@@ -19,12 +19,10 @@ namespace Exceptions {
 
 
 class reinterpretation_error : public Dune::Exception
-{
-};
+{};
 
 class spe10_data_file_missing : public Dune::IOError
-{
-};
+{};
 
 
 } // namespace Exceptions

@@ -151,12 +151,13 @@ public:
 
 
 template <class FunctionType, Derivative derivative>
-class DerivedLocalFunction : public LocalfunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
-                                                           typename SelectDerived<FunctionType, derivative>::D,
-                                                           SelectDerived<FunctionType, derivative>::d,
-                                                           typename SelectDerived<FunctionType, derivative>::R,
-                                                           SelectDerived<FunctionType, derivative>::r,
-                                                           SelectDerived<FunctionType, derivative>::rC>
+class DerivedLocalFunction
+  : public LocalfunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
+                                  typename SelectDerived<FunctionType, derivative>::D,
+                                  SelectDerived<FunctionType, derivative>::d,
+                                  typename SelectDerived<FunctionType, derivative>::R,
+                                  SelectDerived<FunctionType, derivative>::r,
+                                  SelectDerived<FunctionType, derivative>::rC>
 {
   typedef LocalfunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
                                  typename SelectDerived<FunctionType, derivative>::D,
@@ -177,8 +178,7 @@ public:
   DerivedLocalFunction(const FunctionType& func, const EntityType& ent)
     : BaseType(ent)
     , func_local_(func.local_function(this->entity()))
-  {
-  }
+  {}
 
   virtual size_t order(const XT::Common::Parameter& mu = {}) const override final
   {
@@ -202,12 +202,13 @@ private:
 
 
 template <class FunctionType, Derivative derivative>
-class Derived : public LocalizableFunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
-                                                    typename SelectDerived<FunctionType, derivative>::D,
-                                                    SelectDerived<FunctionType, derivative>::d,
-                                                    typename SelectDerived<FunctionType, derivative>::R,
-                                                    SelectDerived<FunctionType, derivative>::r,
-                                                    SelectDerived<FunctionType, derivative>::rC>
+class Derived
+  : public LocalizableFunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
+                                        typename SelectDerived<FunctionType, derivative>::D,
+                                        SelectDerived<FunctionType, derivative>::d,
+                                        typename SelectDerived<FunctionType, derivative>::R,
+                                        SelectDerived<FunctionType, derivative>::r,
+                                        SelectDerived<FunctionType, derivative>::rC>
 {
   typedef LocalizableFunctionInterface<typename SelectDerived<FunctionType, derivative>::E,
                                        typename SelectDerived<FunctionType, derivative>::D,
@@ -226,14 +227,12 @@ public:
   Derived(const FunctionType& func, const std::string nm = "")
     : func_(Common::make_unique<FunctionStorageType>(func))
     , name_(nm.empty() ? SelectDerived<FunctionType, derivative>::type() + " of '" + func.name() + "'" : nm)
-  {
-  }
+  {}
 
   Derived(const std::shared_ptr<const FunctionType> func, const std::string nm = "")
     : func_(Common::make_unique<FunctionStorageType>(func))
     , name_(nm.empty() ? SelectDerived<FunctionType, derivative>::type() + " of '" + func_->access().name() + "'" : nm)
-  {
-  }
+  {}
 
   Derived(ThisType&& source) = default;
   Derived(const ThisType& other) = delete;
@@ -281,8 +280,7 @@ public:
   template <class... Args>
   DivergenceFunction(Args&&... args)
     : BaseType(std::forward<Args>(args)...)
-  {
-  }
+  {}
 }; // class DivergenceFunction
 
 

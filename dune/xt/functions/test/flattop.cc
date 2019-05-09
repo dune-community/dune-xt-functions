@@ -10,7 +10,7 @@
 //   Tobias Leibner  (2016)
 
 #ifndef DUNE_XT_COMMON_TEST_MAIN_CATCH_EXCEPTIONS
-#define DUNE_XT_COMMON_TEST_MAIN_CATCH_EXCEPTIONS 1
+#  define DUNE_XT_COMMON_TEST_MAIN_CATCH_EXCEPTIONS 1
 #endif
 
 #include <dune/xt/common/test/main.hxx>
@@ -53,9 +53,8 @@ public:
 
 template <class DimDomain>
 class FlatTopFunctionTest
-    : public FunctionTest<
-          typename FlatTopFunctionType<YaspGrid<DimDomain::value,
-                                                EquidistantOffsetCoordinates<double, DimDomain::value>>>::value>
+  : public FunctionTest<typename FlatTopFunctionType<
+        YaspGrid<DimDomain::value, EquidistantOffsetCoordinates<double, DimDomain::value>>>::value>
 {
 protected:
   typedef YaspGrid<DimDomain::value, EquidistantOffsetCoordinates<double, DimDomain::value>> GridType;

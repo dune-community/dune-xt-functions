@@ -104,18 +104,14 @@ template <class EntityImp,
           class RangeFieldImp,
           size_t rangeDim,
           size_t rangeDimCols>
-class CheckerboardFunctionFactory<CheckerboardFunction<EntityImp,
-                                                       DomainFieldImp,
-                                                       domainDim,
-                                                       RangeFieldImp,
-                                                       rangeDim,
-                                                       rangeDimCols,
-                                                       ConstantFunction<EntityImp,
-                                                                        DomainFieldImp,
-                                                                        domainDim,
-                                                                        RangeFieldImp,
-                                                                        rangeDim,
-                                                                        rangeDimCols>>>
+class CheckerboardFunctionFactory<
+    CheckerboardFunction<EntityImp,
+                         DomainFieldImp,
+                         domainDim,
+                         RangeFieldImp,
+                         rangeDim,
+                         rangeDimCols,
+                         ConstantFunction<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>>>
 {
   typedef ConstantFunction<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>
       ConstantFunctionType;
@@ -184,10 +180,10 @@ class CheckerboardFunction : public internal::CheckerboardInterfaceChooser<Local
       ThisType;
 
 public:
-  using typename BaseType::EntityType;
   using typename BaseType::DomainType;
-  using typename BaseType::RangeType;
+  using typename BaseType::EntityType;
   using typename BaseType::LocalfunctionType;
+  using typename BaseType::RangeType;
 
   using BaseType::dimDomain;
 
@@ -225,21 +221,16 @@ public:
 
   // constructor for constant function
   template <class L = LocalizableFunctionType,
-            typename std::enable_if<std::is_base_of<ConstantFunction<EntityImp,
-                                                                     DomainFieldImp,
-                                                                     domainDim,
-                                                                     RangeFieldImp,
-                                                                     rangeDim,
-                                                                     rangeDimCols>,
-                                                    L>::value>::type...>
+            typename std::enable_if<std::is_base_of<
+                ConstantFunction<EntityImp, DomainFieldImp, domainDim, RangeFieldImp, rangeDim, rangeDimCols>,
+                L>::value>::type...>
   CheckerboardFunction(const DomainType& lower_left,
                        const DomainType& upper_right,
                        const FieldVector<size_t, dimDomain>& num_elements,
                        const std::vector<RangeType>& values,
                        const std::string nm = static_id())
     : CheckerboardFunction(lower_left, upper_right, num_elements, make_constant_functions<L>(values), nm)
-  {
-  }
+  {}
 
   CheckerboardFunction(const DomainType& lower_left,
                        const DomainType& upper_right,

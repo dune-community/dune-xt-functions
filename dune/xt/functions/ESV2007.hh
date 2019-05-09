@@ -16,9 +16,9 @@
 #include <type_traits>
 
 #if HAVE_EIGEN
-#include <dune/xt/common/disable_warnings.hh>
-#include <Eigen/Eigenvalues>
-#include <dune/xt/common/reenable_warnings.hh>
+#  include <dune/xt/common/disable_warnings.hh>
+#  include <Eigen/Eigenvalues>
+#  include <dune/xt/common/reenable_warnings.hh>
 #endif
 
 #include <dune/geometry/referenceelements.hh>
@@ -27,7 +27,7 @@
 #include <dune/xt/common/debug.hh>
 #include <dune/xt/common/ranges.hh>
 #if HAVE_DUNE_XT_LA
-#include <dune/xt/la/container/eigen.hh>
+#  include <dune/xt/la/container/eigen.hh>
 #endif
 
 #include <dune/xt/functions/interfaces.hh>
@@ -50,7 +50,7 @@ class Testcase1Force : public LocalizableFunctionInterface<E, D, d, R, r, rC>
 
 template <class EntityImp, class DomainFieldImp, class RangeFieldImp>
 class Testcase1Force<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1>
 {
   typedef Testcase1Force<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1> ThisType;
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1> BaseType;
@@ -58,8 +58,8 @@ class Testcase1Force<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
 public:
   using typename BaseType::DomainFieldType;
   using typename BaseType::DomainType;
-  using typename BaseType::RangeType;
   using typename BaseType::JacobianRangeType;
+  using typename BaseType::RangeType;
 
   static const bool available = true;
 
@@ -97,8 +97,7 @@ public:
                  const std::string nm = static_id())
     : order_(ord)
     , name_(nm)
-  {
-  }
+  {}
 
   Testcase1Force(const ThisType& /*other*/) = default;
 
@@ -159,7 +158,7 @@ class Testcase1ExactSolution : public LocalizableFunctionInterface<E, D, d, R, r
 
 template <class EntityImp, class DomainFieldImp, class RangeFieldImp>
 class Testcase1ExactSolution<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
-    : public GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
+  : public GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
 {
   typedef Testcase1ExactSolution<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1> ThisType;
   typedef GlobalFunctionInterface<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1> BaseType;
@@ -167,8 +166,8 @@ class Testcase1ExactSolution<EntityImp, DomainFieldImp, 2, RangeFieldImp, 1, 1>
 public:
   using typename BaseType::DomainFieldType;
   using typename BaseType::DomainType;
-  using typename BaseType::RangeType;
   using typename BaseType::JacobianRangeType;
+  using typename BaseType::RangeType;
 
   static const bool available = true;
 
@@ -206,8 +205,7 @@ public:
                          const std::string nm = static_id())
     : order_(ord)
     , name_(nm)
-  {
-  }
+  {}
 
   Testcase1ExactSolution(const ThisType& /*other*/) = default;
 
@@ -260,12 +258,13 @@ template <class DiffusionFactorType, class DiffusionTensorType = void>
 class CutoffFunction;
 
 template <class DiffusionType>
-class CutoffFunction<DiffusionType, void> : public LocalizableFunctionInterface<typename DiffusionType::EntityType,
-                                                                                typename DiffusionType::DomainFieldType,
-                                                                                DiffusionType::dimDomain,
-                                                                                typename DiffusionType::RangeFieldType,
-                                                                                1,
-                                                                                1>
+class CutoffFunction<DiffusionType, void>
+  : public LocalizableFunctionInterface<typename DiffusionType::EntityType,
+                                        typename DiffusionType::DomainFieldType,
+                                        DiffusionType::dimDomain,
+                                        typename DiffusionType::RangeFieldType,
+                                        1,
+                                        1>
 {
   static_assert(is_localizable_function<DiffusionType>::value,
                 "DiffusionType has to be tagged as a LocalizableFunction!");
@@ -385,8 +384,7 @@ public:
     : diffusion_(diffusion)
     , poincare_constant_(poincare_constant)
     , name_(nm)
-  {
-  }
+  {}
 
   CutoffFunction(const ThisType& other) = default;
 
@@ -409,12 +407,13 @@ private:
 }; // class Cutoff
 
 template <class DiffusionFactorType, class DiffusionTensorType>
-class CutoffFunction : public LocalizableFunctionInterface<typename DiffusionFactorType::EntityType,
-                                                           typename DiffusionFactorType::DomainFieldType,
-                                                           DiffusionFactorType::dimDomain,
-                                                           typename DiffusionFactorType::RangeFieldType,
-                                                           1,
-                                                           1>
+class CutoffFunction
+  : public LocalizableFunctionInterface<typename DiffusionFactorType::EntityType,
+                                        typename DiffusionFactorType::DomainFieldType,
+                                        DiffusionFactorType::dimDomain,
+                                        typename DiffusionFactorType::RangeFieldType,
+                                        1,
+                                        1>
 {
   static_assert(is_localizable_function<DiffusionFactorType>::value,
                 "DiffusionFactorType has to be tagged as a LocalizableFunction!");
@@ -502,9 +501,9 @@ class CutoffFunction : public LocalizableFunctionInterface<typename DiffusionFac
 #if !HAVE_DUNE_XT_LA
         static_assert(AlwaysFalse<DT>::value, "You are missing dune-xt-la!");
 #else
-#if !HAVE_EIGEN
+#  if !HAVE_EIGEN
         static_assert(AlwaysFalse<DT>::value, "You are missing eigen!");
-#else
+#  else
         const auto local_diffusion_tensor = diffusion_tensor.local_function(ent);
         assert(local_diffusion_tensor->order() == 0);
         const auto& reference_element = ReferenceElements<DomainFieldType, dimDomain>::general(ent.type());
@@ -525,7 +524,7 @@ class CutoffFunction : public LocalizableFunctionInterface<typename DiffusionFac
           min_ev = std::min(min_ev, eigenvalue);
         }
         return min_ev;
-#endif // HAVE_EIGEN
+#  endif // HAVE_EIGEN
 #endif // HAVE_DUNE_XT_LA
       } // ... min_eigenvalue_of_(...)
     }; // class Compute< ..., d, d >
@@ -621,8 +620,7 @@ public:
     , diffusion_tensor_(diffusion_tensor)
     , poincare_constant_(poincare_constant)
     , name_(nm)
-  {
-  }
+  {}
 
   CutoffFunction(const ThisType& other) = default;
 
