@@ -37,10 +37,10 @@ void addbind_for_Grid(pybind11::module& m)
 {
   using namespace Dune::XT::Functions;
   const auto grid_id = Dune::XT::Grid::bindings::grid_name<G>::value();
-  const auto diff = internal::Combination::difference;
-  const auto sum = internal::Combination::sum;
-  const auto prod = internal::Combination::product;
-  const auto g_dim = G::dimension;
+  constexpr const auto diff = internal::Combination::difference;
+  constexpr const auto sum = internal::Combination::sum;
+  constexpr const auto prod = internal::Combination::product;
+  constexpr const auto g_dim = G::dimension;
   Dune::XT::Common::bindings::try_register(m, [&](pybind11::module& mod) {
     auto i_1_1 = bind_LocalizableFunctionInterface<G, 1, 1>(mod, grid_id);
     addbind_LocalizableFunctionInterface_combined_op<G, g_dim, prod, 1, 1, 2, 1>(i_1_1);
